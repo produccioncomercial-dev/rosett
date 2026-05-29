@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rossett Joyería de Plata</title>
+  <meta name="description" content="Catálogo moderno de joyería de plata Rossett con compra por WhatsApp.">
+  <style>
+    :root {
+      --navy: #071b3a;
+      --navy-2: #0c2a55;
+      --silver: #bfc5ce;
+      --silver-2: #e7eaf0;
+      --ink: #162033;
+      --muted: #697386;
+      --paper: #ffffff;
+      --soft: #f6f8fb;
+      --line: #d9dde5;
+      --success: #0f7a4f;
+      --shadow: 0 18px 50px rgba(7, 27, 58, .12);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--navy);
+      color: white;
+      border-bottom: 1px solid rgba(191, 197, 206, .38);
+      box-shadow: 0 10px 30px rgba(7, 27, 58, .18);
+    }
+
+    .header-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 210px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      font-weight: 800;
+      letter-spacing: .5px;
+      background:
+        linear-gradient(145deg, #ffffff, #aeb6c4 56%, #f4f6f9);
+      border: 1px solid rgba(255,255,255,.45);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      margin: 2px 0 0;
+      color: #d6dce7;
+      font-size: .82rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dbe2ee;
+      font-size: .92rem;
+      text-align: right;
+    }
+
+    .hero {
+      background:
+        linear-gradient(115deg, rgba(7,27,58,.96), rgba(12,42,85,.88)),
+        radial-gradient(circle at 80% 16%, rgba(191,197,206,.55), transparent 34%);
+      color: white;
+      border-bottom: 1px solid var(--silver);
+    }
+
+    .hero-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 54px 0 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .72fr);
+      gap: 34px;
+      align-items: end;
+    }
+
+    .hero-kicker {
+      color: #d8dee9;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 700;
+      font-size: .78rem;
+      margin: 0 0 12px;
+    }
+
+    .hero h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(2.25rem, 5vw, 4.9rem);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 18px 0 0;
+      color: #e4e8ef;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.6;
+    }
+
+    .hero-panel {
+      border: 1px solid rgba(231, 234, 240, .42);
+      background: rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(231, 234, 240, .24);
+    }
+
+    .hero-stat:last-child {
+      border-bottom: 0;
+    }
+
+    .hero-stat strong {
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .hero-stat span {
+      color: #d4dbe8;
+      text-align: right;
+    }
+
+    main {
+      background: var(--paper);
+    }
+
+    .catalog-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 60px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      align-items: center;
+      padding: 16px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 34px rgba(7, 27, 58, .05);
+      margin-bottom: 22px;
+    }
+
+    .field {
+      position: relative;
+      min-width: 0;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 12px;
+      color: var(--ink);
+      background: white;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--navy-2);
+      box-shadow: 0 0 0 3px rgba(12, 42, 85, .12);
+    }
+
+    .catalog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .catalog-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
+    }
+
+    .result-count {
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 26px rgba(7, 27, 58, .07);
+      min-height: 100%;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--silver);
+      box-shadow: var(--shadow);
+    }
+
+    .media {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background:
+        linear-gradient(135deg, #f8f9fb, #e7eaf0);
+      overflow: hidden;
+    }
+
+    .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+
+    .product-card:hover .media img {
+      transform: scale(1.04);
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 6px 9px;
+      color: var(--navy);
+      background: rgba(255,255,255,.9);
+      border: 1px solid var(--silver);
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: .73rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .card-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+    }
+
+    .product-title {
+      margin: 0;
+      min-height: 46px;
+      color: var(--navy);
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .product-meta {
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.4;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .price {
+      color: var(--navy);
+      font-weight: 850;
+      font-size: 1.18rem;
+    }
+
+    .old-price {
+      color: #8a93a4;
+      text-decoration: line-through;
+      font-size: .95rem;
+    }
+
+    .details-button,
+    .whatsapp-button,
+    .ghost-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      border: 1px solid var(--navy);
+      border-radius: var(--radius);
+      padding: 0 14px;
+      background: var(--navy);
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .details-button:hover,
+    .whatsapp-button:hover,
+    .ghost-button:hover {
+      transform: translateY(-1px);
+      background: var(--navy-2);
+    }
+
+    .ghost-button {
+      background: white;
+      color: var(--navy);
+    }
+
+    .empty-state,
+    .status {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--soft);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .csv-fallback {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .csv-fallback.visible {
+      display: block;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      background: rgba(7, 27, 58, .72);
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modal-card {
+      width: min(980px, 100%);
+      margin: 20px auto;
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,.28);
+      border: 1px solid var(--silver);
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px;
+      background: var(--navy);
+    }
+
+    .close-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: var(--radius);
+      color: white;
+      background: rgba(255,255,255,.08);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: minmax(280px, .92fr) minmax(0, 1fr);
+      gap: 28px;
+      padding: 24px;
+    }
+
+    .gallery-main {
+      aspect-ratio: 1 / 1;
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .thumb {
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      aspect-ratio: 1 / 1;
+      background: white;
+      overflow: hidden;
+    }
+
+    .thumb.is-active {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 2px rgba(12, 42, 85, .12);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-info h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1.08;
+    }
+
+    .sku {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .story {
+      margin: 18px 0;
+      color: #364255;
+      line-height: 1.7;
+      border-left: 3px solid var(--silver);
+      padding-left: 14px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .detail-item {
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: var(--soft);
+      min-height: 72px;
+    }
+
+    .detail-item span {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 5px;
+    }
+
+    .detail-item strong {
+      color: var(--navy);
+      line-height: 1.35;
+    }
+
+    .location-box {
+      margin: 18px 0;
+      padding: 14px;
+      border: 1px solid var(--silver);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #ffffff, #f8f9fb);
+      color: #38465b;
+      line-height: 1.55;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .whatsapp-button {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .whatsapp-button:hover {
+      background: #0c6843;
+    }
+
+    footer {
+      border-top: 1px solid var(--silver-2);
+      background: var(--navy);
+      color: #dce3ee;
+      padding: 28px 0;
+    }
+
+    .footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1040px) {
+      .toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .header-inner,
+      .catalog-shell,
+      .hero-inner,
+      .footer-inner {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .header-inner {
+        min-height: 66px;
+      }
+
+      .header-actions {
+        display: none;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        padding: 38px 0 24px;
+      }
+
+      .hero-panel {
+        padding: 12px 14px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+
+      .catalog-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card-body {
+        padding: 12px;
+      }
+
+      .product-title {
+        min-height: 58px;
+        font-size: .94rem;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-title {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand" aria-label="Rossett Joyería de Plata">
+        <div class="brand-mark">R</div>
+        <div>
+          <p class="brand-title">Rossett</p>
+          <p class="brand-subtitle">Joyería de plata</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span>Catálogo actualizado desde CSV</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-kicker">Plata 925 y 950</p>
+        <h1>Joyas de plata con significado propio.</h1>
+        <p class="hero-copy">Explora piezas disponibles por sucursal, ciudad, familia y diseño. Cada joya tiene su historia y puedes comprarla al instante por WhatsApp.</p>
+      </div>
+      <div class="hero-panel" aria-label="Resumen del catálogo">
+        <div class="hero-stat">
+          <strong id="statProducts">0</strong>
+          <span>joyas publicadas</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="statCities">0</strong>
+          <span>ciudades disponibles</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="statFamilies">0</strong>
+          <span>familias para filtrar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="catalog-shell" aria-labelledby="catalogTitle">
+      <div class="toolbar" aria-label="Filtros del catálogo">
+        <div class="field">
+          <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño">
+        </div>
+        <div class="field">
+          <select id="familyFilter" aria-label="Filtrar por familia">
+            <option value="">Todas las familias</option>
+          </select>
+        </div>
+        <div class="field">
+          <select id="subfamilyFilter" aria-label="Filtrar por subfamilia">
+            <option value="">Todas las subfamilias</option>
+          </select>
+        </div>
+        <div class="field">
+          <select id="designFilter" aria-label="Filtrar por diseño">
+            <option value="">Todos los diseños</option>
+          </select>
+        </div>
+        <div class="field">
+          <select id="cityFilter" aria-label="Filtrar por ciudad">
+            <option value="">Todas las ciudades</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="catalog-head">
+        <h2 id="catalogTitle">Catálogo disponible</h2>
+        <div class="result-count" id="resultCount">Cargando productos...</div>
+      </div>
+
+      <div id="status" class="status">Cargando productos desde productosrosett.csv...</div>
+      <div id="csvFallback" class="csv-fallback">
+        <label class="ghost-button">
+          Cargar CSV manualmente
+          <input id="csvInput" type="file" accept=".csv,text/csv" hidden>
+        </label>
+      </div>
+      <div id="productGrid" class="product-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <article class="modal-card">
+      <div class="modal-top">
+        <button class="close-button" id="closeModal" type="button" aria-label="Cerrar detalle">x</button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <div class="gallery-main">
+            <img id="modalImage" alt="">
+          </div>
+          <div id="modalThumbs" class="thumbs"></div>
+        </div>
+        <div class="modal-info">
+          <h3 id="modalTitle"></h3>
+          <p class="sku" id="modalSku"></p>
+          <div class="price-row" id="modalPrice"></div>
+          <p class="story" id="modalDescription"></p>
+          <div class="detail-grid" id="modalDetails"></div>
+          <div class="location-box" id="modalLocation"></div>
+          <div class="modal-actions">
+            <a id="modalWhatsapp" class="whatsapp-button" target="_blank" rel="noopener">Comprar por WhatsApp</a>
+            <button class="ghost-button" id="modalCloseBottom" type="button">Seguir viendo</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>Rossett Joyería de Plata</strong>
+      <span>Catálogo estático listo para GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script>
+    const CSV_FILE = 'productosrosett.csv';
+    const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="0.55" stop-color="#e7eaf0"/>
+            <stop offset="1" stop-color="#bfc5ce"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="800" fill="url(#g)"/>
+        <circle cx="400" cy="364" r="128" fill="none" stroke="#071b3a" stroke-width="26"/>
+        <path d="M292 510h216" stroke="#071b3a" stroke-width="24" stroke-linecap="round"/>
+        <text x="400" y="610" text-anchor="middle" font-family="Arial" font-size="44" fill="#071b3a">Rossett</text>
+      </svg>
+    `);
+
+    const state = {
+      products: [],
+      filtered: [],
+      activeProduct: null
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+
+    const els = {
+      grid: $('#productGrid'),
+      status: $('#status'),
+      fallback: $('#csvFallback'),
+      csvInput: $('#csvInput'),
+      search: $('#searchInput'),
+      family: $('#familyFilter'),
+      subfamily: $('#subfamilyFilter'),
+      design: $('#designFilter'),
+      city: $('#cityFilter'),
+      resultCount: $('#resultCount'),
+      statProducts: $('#statProducts'),
+      statCities: $('#statCities'),
+      statFamilies: $('#statFamilies'),
+      modal: $('#productModal'),
+      closeModal: $('#closeModal'),
+      modalCloseBottom: $('#modalCloseBottom'),
+      modalImage: $('#modalImage'),
+      modalThumbs: $('#modalThumbs'),
+      modalTitle: $('#modalTitle'),
+      modalSku: $('#modalSku'),
+      modalPrice: $('#modalPrice'),
+      modalDescription: $('#modalDescription'),
+      modalDetails: $('#modalDetails'),
+      modalLocation: $('#modalLocation'),
+      modalWhatsapp: $('#modalWhatsapp')
+    };
+
+    function normalizeText(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function getValue(row, names) {
+      for (const name of names) {
+        if (Object.prototype.hasOwnProperty.call(row, name)) return row[name];
+      }
+      const normalized = Object.keys(row).find((key) => names.some((name) => normalizeText(key) === normalizeText(name)));
+      return normalized ? row[normalized] : '';
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+
+        if (char === ',' && !inQuotes) {
+          row.push(field);
+          field = '';
+          continue;
+        }
+
+        if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (char === '\r' && next === '\n') i++;
+          row.push(field);
+          if (row.some((cell) => cell.trim() !== '')) rows.push(row);
+          row = [];
+          field = '';
+          continue;
+        }
+
+        field += char;
+      }
+
+      if (field || row.length) {
+        row.push(field);
+        if (row.some((cell) => cell.trim() !== '')) rows.push(row);
+      }
+
+      const headers = rows.shift().map((header) => header.trim());
+      return rows.map((cells) => {
+        const item = {};
+        headers.forEach((header, index) => {
+          item[header] = (cells[index] || '').trim();
+        });
+        return item;
+      });
+    }
+
+    function money(value) {
+      const number = Number(String(value || '').replace(/[^\d.]/g, ''));
+      if (!Number.isFinite(number) || number <= 0) return '';
+      return `S/ ${number.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    function cleanNumber(value) {
+      const number = Number(String(value || '').replace(',', '.'));
+      if (!Number.isFinite(number)) return '';
+      return Number.isInteger(number) ? String(number) : String(number).replace(/\.0$/, '');
+    }
+
+    function categoryParts(category) {
+      const parts = String(category || '').split('>').map((part) => part.trim()).filter(Boolean);
+      return {
+        family: parts[0] || 'Otros',
+        subfamily: parts[1] || '',
+        design: parts[2] || ''
+      };
+    }
+
+    function splitImages(value) {
+      return String(value || '')
+        .split(',')
+        .map((url) => url.trim())
+        .filter(Boolean);
+    }
+
+    function productFromRow(row) {
+      const category = getValue(row, ['Categorías 2', 'Categorias 2']);
+      const parts = categoryParts(category);
+      const rawSize = cleanNumber(getValue(row, ['Valor(es) del atributo 3']));
+      const familyKey = normalizeText(parts.family);
+      const shouldUseCm = familyKey.startsWith('cadena') || familyKey.startsWith('pulsera');
+      const size = rawSize && Number(rawSize) !== 0 ? `${rawSize}${shouldUseCm ? ' cm' : ''}` : '';
+      const images = splitImages(getValue(row, ['Imágenes', 'Imagenes']));
+
+      return {
+        sku: getValue(row, ['SKU']),
+        name: getValue(row, ['Nombre']),
+        description: getValue(row, ['Descripción', 'Descripcion']),
+        published: getValue(row, ['Publicado']) === '1',
+        salePrice: getValue(row, ['Precio rebajado']),
+        regularPrice: getValue(row, ['Precio normal']),
+        metal: getValue(row, ['Valor(es) del atributo 1']),
+        weight: cleanNumber(getValue(row, ['Valor(es) del atributo 2'])),
+        size,
+        branch: getValue(row, ['Etiquetas']),
+        images: images.length ? images : [PLACEHOLDER_IMAGE],
+        category,
+        family: parts.family,
+        subfamily: parts.subfamily,
+        design: parts.design,
+        phone: getValue(row, ['Celular Sucursal']),
+        address: getValue(row, ['Dirección Sucursal', 'Direccion Sucursal']),
+        city: getValue(row, ['Ciudad Sucursal'])
+      };
+    }
+
+    function optionList(values, placeholder) {
+      const unique = [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+      return `<option value="">${placeholder}</option>` + unique.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
+    }
+
+    function refreshFilters() {
+      const family = els.family.value;
+      const subfamily = els.subfamily.value;
+
+      els.family.innerHTML = optionList(state.products.map((p) => p.family), 'Todas las familias');
+      els.family.value = family;
+
+      const subfamilyPool = state.products.filter((p) => !els.family.value || p.family === els.family.value);
+      els.subfamily.innerHTML = optionList(subfamilyPool.map((p) => p.subfamily), 'Todas las subfamilias');
+      if ([...els.subfamily.options].some((option) => option.value === subfamily)) els.subfamily.value = subfamily;
+
+      const designPool = subfamilyPool.filter((p) => !els.subfamily.value || p.subfamily === els.subfamily.value);
+      const currentDesign = els.design.value;
+      els.design.innerHTML = optionList(designPool.map((p) => p.design), 'Todos los diseños');
+      if ([...els.design.options].some((option) => option.value === currentDesign)) els.design.value = currentDesign;
+
+      const currentCity = els.city.value;
+      els.city.innerHTML = optionList(state.products.map((p) => p.city), 'Todas las ciudades');
+      if ([...els.city.options].some((option) => option.value === currentCity)) els.city.value = currentCity;
+    }
+
+    function applyFilters() {
+      const query = normalizeText(els.search.value);
+      const family = els.family.value;
+      const subfamily = els.subfamily.value;
+      const design = els.design.value;
+      const city = els.city.value;
+
+      state.filtered = state.products.filter((product) => {
+        const searchable = normalizeText(`${product.name} ${product.sku} ${product.family} ${product.subfamily} ${product.design} ${product.city}`);
+        return (!query || searchable.includes(query))
+          && (!family || product.family === family)
+          && (!subfamily || product.subfamily === subfamily)
+          && (!design || product.design === design)
+          && (!city || product.city === city);
+      });
+
+      renderProducts();
+    }
+
+    function renderProducts() {
+      els.status.style.display = 'none';
+      els.resultCount.textContent = `${state.filtered.length} ${state.filtered.length === 1 ? 'producto' : 'productos'}`;
+
+      if (!state.filtered.length) {
+        els.grid.innerHTML = '<div class="empty-state">No encontramos joyas con esos filtros. Prueba otra familia, ciudad o busqueda.</div>';
+        return;
+      }
+
+      els.grid.innerHTML = state.filtered.map((product) => {
+        const price = priceMarkup(product);
+        const meta = [product.family, product.design || product.subfamily, product.city].filter(Boolean).join(' · ');
+        return `
+          <article class="product-card">
+            <div class="media">
+              <img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+              ${product.salePrice ? '<span class="badge">Oferta</span>' : ''}
+            </div>
+            <div class="card-body">
+              <h3 class="product-title">${escapeHtml(product.name)}</h3>
+              <div class="product-meta">${escapeHtml(meta)}</div>
+              <div class="price-row">${price}</div>
+              <button class="details-button" type="button" data-sku="${escapeHtml(product.sku)}">Ver detalle</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function priceMarkup(product) {
+      const regular = money(product.regularPrice);
+      const sale = money(product.salePrice);
+      if (sale) {
+        return `<span class="price">${sale}</span><span class="old-price">${regular}</span>`;
+      }
+      return `<span class="price">${regular}</span>`;
+    }
+
+    function openProduct(sku) {
+      const product = state.products.find((item) => item.sku === sku);
+      if (!product) return;
+
+      state.activeProduct = product;
+      els.modalTitle.textContent = product.name;
+      els.modalSku.textContent = `SKU ${product.sku}`;
+      els.modalPrice.innerHTML = priceMarkup(product);
+      els.modalDescription.textContent = product.description || 'Una joya de plata pensada para acompanar momentos especiales.';
+      renderGallery(product, 0);
+      renderDetails(product);
+
+      const location = [product.address, product.city].filter(Boolean).join(', ');
+      els.modalLocation.innerHTML = `
+        <strong>Disponible en ${escapeHtml(product.branch || product.city || 'sucursal')}</strong><br>
+        ${escapeHtml(location || 'Consulta la direccion por WhatsApp.')}
+      `;
+
+      const phone = String(product.phone || '').replace(/\D/g, '');
+      const message = encodeURIComponent(`Hola, quiero comprar la joya "${product.name}" con SKU ${product.sku}. ¿Sigue disponible?`);
+      els.modalWhatsapp.href = `https://wa.me/51${phone}?text=${message}`;
+
+      els.modal.classList.add('is-open');
+      document.body.classList.add('modal-open');
+    }
+
+    function renderGallery(product, activeIndex) {
+      const image = product.images[activeIndex] || product.images[0] || PLACEHOLDER_IMAGE;
+      els.modalImage.src = image;
+      els.modalImage.alt = product.name;
+      els.modalImage.onerror = () => { els.modalImage.src = PLACEHOLDER_IMAGE; };
+
+      els.modalThumbs.innerHTML = product.images.map((url, index) => `
+        <button class="thumb ${index === activeIndex ? 'is-active' : ''}" type="button" data-image-index="${index}" aria-label="Ver foto ${index + 1}">
+          <img src="${escapeHtml(url)}" alt="" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+        </button>
+      `).join('');
+    }
+
+    function renderDetails(product) {
+      const rows = [
+        ['Calidad de Metal', product.metal],
+        ['Peso', product.weight ? `${product.weight} gr` : ''],
+        ['Talla', product.size],
+        ['Familia', product.family],
+        ['Subfamilia', product.subfamily],
+        ['Diseño', product.design],
+        ['Sucursal', product.branch]
+      ].filter(([, value]) => value);
+
+      els.modalDetails.innerHTML = rows.map(([label, value]) => `
+        <div class="detail-item">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+        </div>
+      `).join('');
+    }
+
+    function closeProduct() {
+      els.modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function setStats() {
+      els.statProducts.textContent = state.products.length;
+      els.statCities.textContent = new Set(state.products.map((p) => p.city).filter(Boolean)).size;
+      els.statFamilies.textContent = new Set(state.products.map((p) => p.family).filter(Boolean)).size;
+    }
+
+    function loadCatalog(text) {
+      const rows = parseCSV(text);
+      state.products = rows.map(productFromRow).filter((product) => product.published && product.name && product.sku);
+      state.filtered = [...state.products];
+      refreshFilters();
+      setStats();
+      applyFilters();
+    }
+
+    async function init() {
+      try {
+        const response = await fetch(`${CSV_FILE}?v=${Date.now()}`);
+        if (!response.ok) throw new Error('No se pudo leer el CSV.');
+        const text = await response.text();
+        loadCatalog(text);
+      } catch (error) {
+        els.status.textContent = 'No se pudo cargar productosrosett.csv automáticamente. Si estás abriendo el archivo directamente, usa un servidor local o carga el CSV manualmente.';
+        els.fallback.classList.add('visible');
+      }
+    }
+
+    [els.search, els.family, els.subfamily, els.design, els.city].forEach((control) => {
+      control.addEventListener('input', () => {
+        if (control === els.family || control === els.subfamily) refreshFilters();
+        applyFilters();
+      });
+    });
+
+    els.grid.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-sku]');
+      if (button) openProduct(button.dataset.sku);
+    });
+
+    els.modalThumbs.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-image-index]');
+      if (!button || !state.activeProduct) return;
+      renderGallery(state.activeProduct, Number(button.dataset.imageIndex));
+    });
+
+    els.closeModal.addEventListener('click', closeProduct);
+    els.modalCloseBottom.addEventListener('click', closeProduct);
+    els.modal.addEventListener('click', (event) => {
+      if (event.target === els.modal) closeProduct();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeProduct();
+    });
+
+    els.csvInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      loadCatalog(await file.text());
+      els.fallback.classList.remove('visible');
+    });
+
+    init();
+  </script>
+</body>
+</html>
