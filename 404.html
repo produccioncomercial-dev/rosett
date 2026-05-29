@@ -72,35 +72,15 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
       min-width: 210px;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: var(--navy);
-      font-weight: 800;
-      letter-spacing: .5px;
-      background:
-        linear-gradient(145deg, #ffffff, #aeb6c4 56%, #f4f6f9);
-      border: 1px solid rgba(255,255,255,.45);
-    }
-
-    .brand-title {
-      margin: 0;
-      font-size: 1.08rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .brand-subtitle {
-      margin: 2px 0 0;
-      color: #d6dce7;
-      font-size: .82rem;
+    .brand-logo {
+      display: block;
+      width: auto;
+      max-width: 168px;
+      height: 52px;
+      object-fit: contain;
     }
 
     .header-actions {
@@ -1029,14 +1009,10 @@
   <header class="site-header">
     <div class="header-inner">
       <div class="brand" aria-label="Rossett Joyería de Plata">
-        <div class="brand-mark">R</div>
-        <div>
-          <p class="brand-title">Rossett</p>
-          <p class="brand-subtitle">Joyería de plata</p>
-        </div>
+        <img class="brand-logo" src="logorosett.png" alt="Rossett Joyería de plata">
       </div>
       <div class="header-actions">
-        <span>Catálogo actualizado desde CSV</span>
+        <span>Una marca de Inticash</span>
       </div>
     </div>
   </header>
