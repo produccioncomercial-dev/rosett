@@ -232,7 +232,7 @@
     }
 
     .catalog-shell {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1500px, calc(100% - 48px));
       margin: 0 auto;
       padding: 26px 0 60px;
     }
@@ -248,6 +248,12 @@
       border-radius: var(--radius);
       box-shadow: 0 10px 34px rgba(7, 27, 58, .05);
       margin-bottom: 22px;
+    }
+
+    .filter-drawer-head,
+    .filter-toggle,
+    .filter-backdrop {
+      display: none;
     }
 
     .field {
@@ -295,7 +301,7 @@
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -779,6 +785,16 @@
       letter-spacing: .06em;
     }
 
+    @media (max-width: 1240px) {
+      .catalog-shell {
+        width: min(1180px, calc(100% - 36px));
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
     @media (max-width: 1040px) {
       .toolbar {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -808,9 +824,94 @@
         padding: 38px 0 24px;
       }
 
+      .filter-toggle {
+        position: fixed;
+        left: 12px;
+        top: 86px;
+        z-index: 35;
+        width: 48px;
+        height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid rgba(191, 197, 206, .9);
+        color: white;
+        background: var(--navy);
+        box-shadow: 0 12px 28px rgba(7, 27, 58, .24);
+      }
+
+      .filter-toggle::before {
+        content: "";
+        width: 20px;
+        height: 14px;
+        display: block;
+        background:
+          linear-gradient(currentColor, currentColor) 0 0 / 20px 2px no-repeat,
+          linear-gradient(currentColor, currentColor) 0 6px / 14px 2px no-repeat,
+          linear-gradient(currentColor, currentColor) 0 12px / 18px 2px no-repeat;
+      }
+
+      .filter-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 29;
+        display: block;
+        pointer-events: none;
+        background: rgba(7, 27, 58, .26);
+        opacity: 0;
+        transition: opacity .24s ease;
+      }
+
+      body.filter-open .filter-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
       .toolbar {
-        grid-template-columns: 1fr;
-        padding: 12px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 36;
+        width: min(64vw, 292px);
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 18px 12px;
+        margin: 0;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        border-left: 0;
+        overflow-y: auto;
+        transform: translateX(-105%);
+        transition: transform .3s cubic-bezier(.22, .78, .21, 1);
+        box-shadow: 18px 0 46px rgba(7, 27, 58, .18);
+      }
+
+      body.filter-open .toolbar {
+        transform: translateX(0);
+      }
+
+      .filter-drawer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 4px;
+        color: var(--navy);
+        font-weight: 850;
+      }
+
+      .filter-close {
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: white;
+        color: var(--navy);
+        font-size: 1.2rem;
+        line-height: 1;
       }
 
       .hero-inner {
@@ -969,7 +1070,13 @@
 
   <main>
     <section class="catalog-shell" aria-labelledby="catalogTitle">
+      <button class="filter-toggle" id="filterToggle" type="button" aria-label="Abrir filtros"></button>
+      <div class="filter-backdrop" id="filterBackdrop"></div>
       <div class="toolbar" aria-label="Filtros del catálogo">
+        <div class="filter-drawer-head">
+          <span>Filtros</span>
+          <button class="filter-close" id="filterClose" type="button" aria-label="Cerrar filtros">×</button>
+        </div>
         <div class="field">
           <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño">
         </div>
@@ -1099,6 +1206,9 @@
       fallback: $('#csvFallback'),
       csvInput: $('#csvInput'),
       search: $('#searchInput'),
+      filterToggle: $('#filterToggle'),
+      filterClose: $('#filterClose'),
+      filterBackdrop: $('#filterBackdrop'),
       family: $('#familyFilter'),
       subfamily: $('#subfamilyFilter'),
       design: $('#designFilter'),
@@ -1686,6 +1796,23 @@
       window.history.pushState({}, '', pageUrl(state.page));
       renderProducts();
       document.querySelector('.catalog-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    function closeFilters() {
+      document.body.classList.remove('filter-open');
+    }
+
+    els.filterToggle.addEventListener('click', () => {
+      document.body.classList.add('filter-open');
+    });
+
+    els.filterClose.addEventListener('click', closeFilters);
+    els.filterBackdrop.addEventListener('click', closeFilters);
+
+    [els.search, els.family, els.subfamily, els.design, els.city].forEach((control) => {
+      control.addEventListener('change', () => {
+        if (window.matchMedia('(max-width: 760px)').matches && control !== els.search) closeFilters();
+      });
     });
 
     els.modalThumbs.addEventListener('click', (event) => {
