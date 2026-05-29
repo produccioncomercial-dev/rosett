@@ -113,43 +113,118 @@
     }
 
     .hero {
-      background:
-        linear-gradient(115deg, rgba(7,27,58,.96), rgba(12,42,85,.88)),
-        radial-gradient(circle at 80% 16%, rgba(191,197,206,.55), transparent 34%);
+      background: var(--navy);
       color: white;
       border-bottom: 1px solid var(--silver);
     }
 
     .hero-inner {
-      width: min(1180px, calc(100% - 32px));
+      width: min(100%, 1920px);
       margin: 0 auto;
-      padding: 54px 0 34px;
+      padding: 0;
       display: block;
     }
 
-    .hero-kicker {
-      color: #d8dee9;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      font-weight: 700;
-      font-size: .78rem;
-      margin: 0 0 12px;
+    .banner-carousel {
+      position: relative;
+      overflow: hidden;
+      background: var(--navy);
+      isolation: isolate;
     }
 
-    .hero h1 {
-      max-width: 760px;
-      margin: 0;
-      font-size: clamp(2.25rem, 5vw, 4.9rem);
-      line-height: .98;
-      letter-spacing: 0;
+    .banner-track {
+      display: flex;
+      transform: translateX(calc(var(--banner-index, 0) * -100%));
+      transition: transform .72s cubic-bezier(.22, .78, .21, 1);
+      will-change: transform;
     }
 
-    .hero-copy {
-      max-width: 620px;
-      margin: 18px 0 0;
-      color: #e4e8ef;
-      font-size: clamp(1rem, 2vw, 1.18rem);
-      line-height: 1.6;
+    .banner-slide {
+      min-width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--navy);
+    }
+
+    .banner-slide picture,
+    .banner-slide img {
+      display: block;
+      width: 100%;
+    }
+
+    .banner-slide img {
+      aspect-ratio: 1920 / 650;
+      height: auto;
+      object-fit: cover;
+      transform: scale(1.018);
+      transition: transform 5.5s ease;
+    }
+
+    .banner-slide.is-active img {
+      transform: scale(1);
+    }
+
+    .banner-slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(7, 27, 58, .18), transparent 34%, rgba(7, 27, 58, .15));
+      opacity: .48;
+    }
+
+    .banner-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 3;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.52);
+      background: rgba(7, 27, 58, .42);
+      color: white;
+      transform: translateY(-50%);
+      backdrop-filter: blur(10px);
+      font-size: 1.6rem;
+      line-height: 1;
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .banner-arrow:hover {
+      background: rgba(7, 27, 58, .72);
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .banner-arrow.prev {
+      left: 22px;
+    }
+
+    .banner-arrow.next {
+      right: 22px;
+    }
+
+    .banner-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      z-index: 3;
+      display: flex;
+      gap: 9px;
+      transform: translateX(-50%);
+    }
+
+    .banner-dot {
+      width: 34px;
+      height: 4px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0;
+      background: rgba(255,255,255,.42);
+      overflow: hidden;
+    }
+
+    .banner-dot.is-active {
+      background: white;
     }
 
     main {
@@ -717,7 +792,6 @@
     @media (max-width: 760px) {
       .header-inner,
       .catalog-shell,
-      .hero-inner,
       .footer-inner {
         width: min(100% - 24px, 1180px);
       }
@@ -737,6 +811,37 @@
       .toolbar {
         grid-template-columns: 1fr;
         padding: 12px;
+      }
+
+      .hero-inner {
+        width: 100%;
+        padding: 0;
+      }
+
+      .banner-slide img {
+        aspect-ratio: 1080 / 1350;
+      }
+
+      .banner-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 1.35rem;
+      }
+
+      .banner-arrow.prev {
+        left: 10px;
+      }
+
+      .banner-arrow.next {
+        right: 10px;
+      }
+
+      .banner-dots {
+        bottom: 14px;
+      }
+
+      .banner-dot {
+        width: 26px;
       }
 
       .catalog-head {
@@ -837,9 +942,28 @@
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="hero-kicker">Plata 925 y 950</p>
-      <h1>Joyas de plata con significado propio.</h1>
-      <p class="hero-copy">Explora piezas disponibles por sucursal, ciudad, familia y diseño. Cada joya tiene su historia y puedes comprarla al instante por WhatsApp.</p>
+      <div class="banner-carousel" id="bannerCarousel" aria-label="Portadas Rossett">
+        <div class="banner-track" id="bannerTrack">
+          <article class="banner-slide is-active" aria-label="Portada 1">
+            <picture>
+              <source media="(max-width: 760px)" srcset="banners/bannercelular1.jpg">
+              <img src="banners/bannerpc1.jpg" alt="Joyas para cada momento" fetchpriority="high">
+            </picture>
+          </article>
+          <article class="banner-slide" aria-label="Portada 2">
+            <picture>
+              <source media="(max-width: 760px)" srcset="banners/bannercelular2.jpg">
+              <img src="banners/bannerpc2.jpg" alt="Joyas de plata Rossett">
+            </picture>
+          </article>
+        </div>
+        <button class="banner-arrow prev" type="button" data-banner-direction="-1" aria-label="Portada anterior">‹</button>
+        <button class="banner-arrow next" type="button" data-banner-direction="1" aria-label="Portada siguiente">›</button>
+        <div class="banner-dots" aria-label="Seleccionar portada">
+          <button class="banner-dot is-active" type="button" data-banner-index="0" aria-label="Ver portada 1"></button>
+          <button class="banner-dot" type="button" data-banner-index="1" aria-label="Ver portada 2"></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -962,6 +1086,8 @@
       products: [],
       filtered: [],
       page: 1,
+      bannerIndex: 0,
+      bannerTimer: null,
       activeProduct: null
     };
 
@@ -980,6 +1106,8 @@
       resultCount: $('#resultCount'),
       pagination: $('#pagination'),
       hero: $('.hero'),
+      bannerCarousel: $('#bannerCarousel'),
+      bannerTrack: $('#bannerTrack'),
       catalog: $('.catalog-shell'),
       modal: $('#productModal'),
       closeModal: $('#closeModal'),
@@ -1129,6 +1257,43 @@
     function navigateTo(url) {
       window.history.pushState({}, '', url);
       renderRoute();
+    }
+
+    function setBanner(index) {
+      const slides = [...document.querySelectorAll('.banner-slide')];
+      const dots = [...document.querySelectorAll('.banner-dot')];
+      if (!slides.length) return;
+      state.bannerIndex = (index + slides.length) % slides.length;
+      els.bannerTrack.style.setProperty('--banner-index', state.bannerIndex);
+
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle('is-active', slideIndex === state.bannerIndex);
+      });
+      dots.forEach((dot, dotIndex) => {
+        dot.classList.toggle('is-active', dotIndex === state.bannerIndex);
+      });
+    }
+
+    function startBannerAutoplay() {
+      window.clearInterval(state.bannerTimer);
+      state.bannerTimer = window.setInterval(() => setBanner(state.bannerIndex + 1), 5200);
+    }
+
+    function initBannerCarousel() {
+      if (!els.bannerCarousel) return;
+      setBanner(0);
+      startBannerAutoplay();
+
+      els.bannerCarousel.addEventListener('click', (event) => {
+        const arrow = event.target.closest('[data-banner-direction]');
+        const dot = event.target.closest('[data-banner-index]');
+        if (arrow) setBanner(state.bannerIndex + Number(arrow.dataset.bannerDirection));
+        if (dot) setBanner(Number(dot.dataset.bannerIndex));
+        if (arrow || dot) startBannerAutoplay();
+      });
+
+      els.bannerCarousel.addEventListener('pointerenter', () => window.clearInterval(state.bannerTimer));
+      els.bannerCarousel.addEventListener('pointerleave', startBannerAutoplay);
     }
 
     function productFromRow(row) {
@@ -1544,6 +1709,7 @@
       els.fallback.classList.remove('visible');
     });
 
+    initBannerCarousel();
     init();
   </script>
 </body>

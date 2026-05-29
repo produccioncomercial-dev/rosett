@@ -7,6 +7,7 @@ Página web estática para publicar un catálogo ecommerce de joyería de plata 
 - `index.html`: diseño, filtros, galería, detalle de producto y botón de WhatsApp.
 - `404.html`: copia técnica de la página para que GitHub Pages pueda abrir enlaces directos como `/rosett/SKU`.
 - `productosrosett.csv`: catálogo de productos. Puedes reemplazarlo todos los días con el mismo nombre.
+- `banners/`: portadas del carrusel para PC y celular.
 
 ## Cómo actualizar productos
 
@@ -16,6 +17,17 @@ Página web estática para publicar un catálogo ecommerce de joyería de plata 
 4. Sube el cambio a GitHub.
 
 Solo se muestran productos con `Publicado` igual a `1`.
+
+## Cómo actualizar banners
+
+Reemplaza los archivos manteniendo exactamente el mismo nombre:
+
+- `banners/bannerpc1.jpg`
+- `banners/bannerpc2.jpg`
+- `banners/bannercelular1.jpg`
+- `banners/bannercelular2.jpg`
+
+El sitio muestra `bannerpc1`, luego `bannerpc2` en PC/laptop. En celular usa `bannercelular1`, luego `bannercelular2`.
 
 ## Cómo subirlo a GitHub Pages
 
