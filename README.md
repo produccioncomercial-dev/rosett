@@ -5,6 +5,7 @@ Página web estática para publicar un catálogo ecommerce de joyería de plata 
 ## Archivos importantes
 
 - `index.html`: diseño, filtros, galería, detalle de producto y botón de WhatsApp.
+- `404.html`: copia técnica de la página para que GitHub Pages pueda abrir enlaces directos como `/rosett/SKU`.
 - `productosrosett.csv`: catálogo de productos. Puedes reemplazarlo todos los días con el mismo nombre.
 
 ## Cómo actualizar productos
@@ -26,3 +27,5 @@ Solo se muestran productos con `Publicado` igual a `1`.
 6. Guarda los cambios.
 
 GitHub te mostrará una URL parecida a `https://tu-usuario.github.io/tu-repositorio/`.
+
+En este proyecto, los productos se abren con enlaces del tipo `https://produccioncomercial-dev.github.io/rosett/SKU` y las páginas del catálogo con `/2`, `/3`, etc.
