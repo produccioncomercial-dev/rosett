@@ -265,6 +265,76 @@
       transform: scale(1.04);
     }
 
+    .zoomable {
+      position: relative;
+      touch-action: none;
+      cursor: zoom-in;
+    }
+
+    .magnifier-lens {
+      position: absolute;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      display: none;
+      pointer-events: none;
+      z-index: 8;
+      border: 2px solid rgba(255, 255, 255, .96);
+      outline: 1px solid rgba(7, 27, 58, .24);
+      background-repeat: no-repeat;
+      background-size: 235% 235%;
+      box-shadow: 0 12px 34px rgba(7, 27, 58, .28);
+    }
+
+    .zoomable.is-zooming .magnifier-lens {
+      display: block;
+    }
+
+    .zoom-hint {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      z-index: 7;
+      background: rgba(255, 255, 255, .9);
+      border: 1px solid var(--silver);
+      box-shadow: 0 8px 22px rgba(7, 27, 58, .15);
+      opacity: .92;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .zoom-hint::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 9px;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+    }
+
+    .zoom-hint::after {
+      content: "";
+      position: absolute;
+      left: 23px;
+      top: 23px;
+      width: 10px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--navy);
+      transform: rotate(45deg);
+      transform-origin: left center;
+    }
+
+    .zoomable.is-zooming .zoom-hint,
+    .zoomable:hover .zoom-hint {
+      opacity: 0;
+      transform: scale(.86);
+    }
+
     .badge {
       position: absolute;
       top: 10px;
@@ -451,6 +521,7 @@
     }
 
     .gallery-main {
+      position: relative;
       aspect-ratio: 1 / 1;
       border: 1px solid var(--silver-2);
       border-radius: var(--radius);
@@ -698,6 +769,30 @@
         padding: 0 10px;
         font-size: .86rem;
       }
+
+      .magnifier-lens {
+        width: 104px;
+        height: 104px;
+      }
+
+      .zoom-hint {
+        width: 34px;
+        height: 34px;
+        right: 8px;
+        bottom: 8px;
+      }
+
+      .zoom-hint::before {
+        left: 9px;
+        top: 8px;
+        width: 10px;
+        height: 10px;
+      }
+
+      .zoom-hint::after {
+        left: 21px;
+        top: 21px;
+      }
     }
   </style>
 </head>
@@ -777,8 +872,10 @@
       </div>
       <div class="modal-body">
         <div>
-          <div class="gallery-main">
+          <div class="gallery-main zoomable">
             <img id="modalImage" alt="">
+            <span class="magnifier-lens" aria-hidden="true"></span>
+            <span class="zoom-hint" aria-hidden="true"></span>
           </div>
           <div id="modalThumbs" class="thumbs"></div>
         </div>
@@ -1078,8 +1175,10 @@
         const meta = [product.family, product.design || product.subfamily, product.city].filter(Boolean).join(' · ');
         return `
           <article class="product-card">
-            <div class="media">
+            <div class="media zoomable">
               <img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMAGE}'">
+              <span class="magnifier-lens" aria-hidden="true"></span>
+              <span class="zoom-hint" aria-hidden="true"></span>
               ${product.salePrice ? '<span class="badge">Oferta</span>' : ''}
             </div>
             <div class="card-body">
@@ -1178,6 +1277,99 @@
       els.modal.classList.remove('is-open');
       document.body.classList.remove('modal-open');
     }
+
+    let activeZoomable = null;
+    let activeZoomPointerType = 'mouse';
+    let zoomHideTimer = null;
+
+    function showMagnifier(container, event) {
+      if (!container) return;
+      window.clearTimeout(zoomHideTimer);
+      activeZoomable = container;
+      activeZoomPointerType = event.pointerType || 'mouse';
+      container.classList.add('is-zooming');
+      updateMagnifier(container, event);
+    }
+
+    function hideMagnifier(container) {
+      const target = container || activeZoomable;
+      if (!target) return;
+      target.classList.remove('is-zooming');
+      activeZoomable = null;
+      activeZoomPointerType = 'mouse';
+    }
+
+    function updateMagnifier(container, event) {
+      const image = container.querySelector('img');
+      const lens = container.querySelector('.magnifier-lens');
+      if (!image || !lens) return;
+
+      const rect = container.getBoundingClientRect();
+      const zoom = 2.35;
+      const lensSize = lens.offsetWidth || 132;
+      const x = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
+      const y = Math.max(0, Math.min(event.clientY - rect.top, rect.height));
+      const left = Math.max(0, Math.min(x - lensSize / 2, rect.width - lensSize));
+      const top = Math.max(0, Math.min(y - lensSize / 2, rect.height - lensSize));
+      const bgX = Math.max(-(rect.width * zoom - lensSize), Math.min(0, -(x * zoom - lensSize / 2)));
+      const bgY = Math.max(-(rect.height * zoom - lensSize), Math.min(0, -(y * zoom - lensSize / 2)));
+
+      lens.style.left = `${left}px`;
+      lens.style.top = `${top}px`;
+      lens.style.backgroundImage = `url("${image.currentSrc || image.src}")`;
+      lens.style.backgroundSize = `${rect.width * zoom}px ${rect.height * zoom}px`;
+      lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+    }
+
+    document.addEventListener('pointerover', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      const container = event.target.closest('.zoomable');
+      if (container) showMagnifier(container, event);
+    });
+
+    document.addEventListener('pointermove', (event) => {
+      const container = activeZoomable || (event.pointerType === 'mouse' ? event.target.closest('.zoomable') : null);
+      if (!container) return;
+      if (event.pointerType === 'mouse' && !container.classList.contains('is-zooming')) showMagnifier(container, event);
+      if (event.pointerType !== 'mouse') event.preventDefault();
+      updateMagnifier(container, event);
+    }, { passive: false });
+
+    document.addEventListener('pointerout', (event) => {
+      if (event.pointerType !== 'mouse') return;
+      const container = event.target.closest('.zoomable');
+      if (container && !container.contains(event.relatedTarget)) hideMagnifier(container);
+    });
+
+    document.addEventListener('pointerdown', (event) => {
+      const container = event.target.closest('.zoomable');
+      if (!container) return;
+      showMagnifier(container, event);
+      if (event.pointerType !== 'mouse') event.preventDefault();
+      if (container.setPointerCapture) {
+        try {
+          container.setPointerCapture(event.pointerId);
+        } catch (error) {}
+      }
+    }, { passive: false });
+
+    document.addEventListener('pointerup', () => {
+      if (activeZoomPointerType === 'mouse') {
+        hideMagnifier();
+        return;
+      }
+      window.clearTimeout(zoomHideTimer);
+      zoomHideTimer = window.setTimeout(() => hideMagnifier(), 1200);
+    });
+    document.addEventListener('pointercancel', () => hideMagnifier());
+
+    document.addEventListener('click', (event) => {
+      const container = event.target.closest('.zoomable');
+      if (!container) return;
+      showMagnifier(container, { clientX: event.clientX, clientY: event.clientY, pointerType: 'touch' });
+      window.clearTimeout(zoomHideTimer);
+      zoomHideTimer = window.setTimeout(() => hideMagnifier(container), 1200);
+    });
 
     function escapeHtml(value) {
       return String(value || '')
