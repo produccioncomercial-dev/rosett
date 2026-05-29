@@ -128,10 +128,7 @@
       width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
       padding: 54px 0 34px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .72fr);
-      gap: 34px;
-      align-items: end;
+      display: block;
     }
 
     .hero-kicker {
@@ -157,36 +154,6 @@
       color: #e4e8ef;
       font-size: clamp(1rem, 2vw, 1.18rem);
       line-height: 1.6;
-    }
-
-    .hero-panel {
-      border: 1px solid rgba(231, 234, 240, .42);
-      background: rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      padding: 18px;
-      backdrop-filter: blur(10px);
-    }
-
-    .hero-stat {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 13px 0;
-      border-bottom: 1px solid rgba(231, 234, 240, .24);
-    }
-
-    .hero-stat:last-child {
-      border-bottom: 0;
-    }
-
-    .hero-stat strong {
-      color: white;
-      font-size: 1.1rem;
-    }
-
-    .hero-stat span {
-      color: #d4dbe8;
-      text-align: right;
     }
 
     main {
@@ -395,6 +362,36 @@
       text-align: center;
     }
 
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      min-width: 44px;
+      height: 42px;
+      border: 1px solid var(--silver);
+      border-radius: var(--radius);
+      color: var(--navy);
+      background: white;
+      font-weight: 800;
+    }
+
+    .pagination button.is-active {
+      color: white;
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .pagination button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
     .csv-fallback {
       display: none;
       margin-top: 16px;
@@ -565,10 +562,22 @@
     .whatsapp-button {
       background: var(--success);
       border-color: var(--success);
+      animation: whatsappPulse 2.2s ease-in-out infinite;
     }
 
     .whatsapp-button:hover {
       background: #0c6843;
+    }
+
+    @keyframes whatsappPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(15, 122, 79, .28);
+      }
+      50% {
+        transform: scale(1.025);
+        box-shadow: 0 0 0 8px rgba(15, 122, 79, 0);
+      }
     }
 
     footer {
@@ -581,10 +590,24 @@
     .footer-inner {
       width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1.1fr repeat(2, minmax(180px, .7fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .footer-item {
+      display: grid;
+      gap: 4px;
+      color: #eef3fb;
+    }
+
+    .footer-item span {
+      color: #bfc9d8;
+      font-size: .84rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
     }
 
     @media (max-width: 1040px) {
@@ -614,12 +637,7 @@
       }
 
       .hero-inner {
-        grid-template-columns: 1fr;
         padding: 38px 0 24px;
-      }
-
-      .hero-panel {
-        padding: 12px 14px;
       }
 
       .toolbar {
@@ -658,15 +676,27 @@
       .detail-grid {
         grid-template-columns: 1fr;
       }
+
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 430px) {
       .product-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
       }
 
       .product-title {
-        min-height: 0;
+        min-height: 64px;
+        font-size: .86rem;
+      }
+
+      .details-button {
+        min-height: 40px;
+        padding: 0 10px;
+        font-size: .86rem;
       }
     }
   </style>
@@ -689,25 +719,9 @@
 
   <section class="hero">
     <div class="hero-inner">
-      <div>
-        <p class="hero-kicker">Plata 925 y 950</p>
-        <h1>Joyas de plata con significado propio.</h1>
-        <p class="hero-copy">Explora piezas disponibles por sucursal, ciudad, familia y diseño. Cada joya tiene su historia y puedes comprarla al instante por WhatsApp.</p>
-      </div>
-      <div class="hero-panel" aria-label="Resumen del catálogo">
-        <div class="hero-stat">
-          <strong id="statProducts">0</strong>
-          <span>joyas publicadas</span>
-        </div>
-        <div class="hero-stat">
-          <strong id="statCities">0</strong>
-          <span>ciudades disponibles</span>
-        </div>
-        <div class="hero-stat">
-          <strong id="statFamilies">0</strong>
-          <span>familias para filtrar</span>
-        </div>
-      </div>
+      <p class="hero-kicker">Plata 925 y 950</p>
+      <h1>Joyas de plata con significado propio.</h1>
+      <p class="hero-copy">Explora piezas disponibles por sucursal, ciudad, familia y diseño. Cada joya tiene su historia y puedes comprarla al instante por WhatsApp.</p>
     </div>
   </section>
 
@@ -752,6 +766,7 @@
         </label>
       </div>
       <div id="productGrid" class="product-grid" aria-live="polite"></div>
+      <div id="pagination" class="pagination" aria-label="Paginación del catálogo"></div>
     </section>
   </main>
 
@@ -785,13 +800,28 @@
 
   <footer>
     <div class="footer-inner">
-      <strong>Rossett Joyería de Plata</strong>
-      <span>Catálogo estático listo para GitHub Pages</span>
+      <div class="footer-item">
+        <span>Razón Social</span>
+        <strong>INVERSIONES EL TESORO S.A.C</strong>
+      </div>
+      <div class="footer-item">
+        <span>R.U.C.</span>
+        <strong>20603568223</strong>
+      </div>
+      <div class="footer-item">
+        <span>Email de atención cliente</span>
+        <strong>info@inticash.com.pe</strong>
+      </div>
+      <div class="footer-item">
+        <span>Métodos de pago aceptados</span>
+        <strong>Visa, Mastercard, American Express</strong>
+      </div>
     </div>
   </footer>
 
   <script>
     const CSV_FILE = 'productosrosett.csv';
+    const PRODUCTS_PER_PAGE = 30;
     const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
         <defs>
@@ -811,6 +841,7 @@
     const state = {
       products: [],
       filtered: [],
+      page: 1,
       activeProduct: null
     };
 
@@ -827,9 +858,7 @@
       design: $('#designFilter'),
       city: $('#cityFilter'),
       resultCount: $('#resultCount'),
-      statProducts: $('#statProducts'),
-      statCities: $('#statCities'),
-      statFamilies: $('#statFamilies'),
+      pagination: $('#pagination'),
       modal: $('#productModal'),
       closeModal: $('#closeModal'),
       modalCloseBottom: $('#modalCloseBottom'),
@@ -941,6 +970,18 @@
         .filter(Boolean);
     }
 
+    function cleanBranchName(value) {
+      return String(value || '')
+        .replace(/^\s*\d+\s*-\s*/, '')
+        .split(',')
+        .map((part) => {
+          const clean = part.trim();
+          return clean ? clean.charAt(0).toUpperCase() + clean.slice(1) : '';
+        })
+        .filter(Boolean)
+        .join(', ');
+    }
+
     function productFromRow(row) {
       const category = getValue(row, ['Categorías 2', 'Categorias 2']);
       const parts = categoryParts(category);
@@ -1014,19 +1055,25 @@
           && (!city || product.city === city);
       });
 
+      state.page = 1;
       renderProducts();
     }
 
     function renderProducts() {
       els.status.style.display = 'none';
-      els.resultCount.textContent = `${state.filtered.length} ${state.filtered.length === 1 ? 'producto' : 'productos'}`;
+      const totalPages = Math.max(1, Math.ceil(state.filtered.length / PRODUCTS_PER_PAGE));
+      if (state.page > totalPages) state.page = totalPages;
+      const start = (state.page - 1) * PRODUCTS_PER_PAGE;
+      const pageProducts = state.filtered.slice(start, start + PRODUCTS_PER_PAGE);
+      els.resultCount.textContent = `${state.filtered.length} ${state.filtered.length === 1 ? 'producto' : 'productos'} · Página ${state.page} de ${totalPages}`;
 
       if (!state.filtered.length) {
-        els.grid.innerHTML = '<div class="empty-state">No encontramos joyas con esos filtros. Prueba otra familia, ciudad o busqueda.</div>';
+        els.grid.innerHTML = '<div class="empty-state">No encontramos joyas con esos filtros. Prueba otra familia, ciudad o búsqueda.</div>';
+        els.pagination.innerHTML = '';
         return;
       }
 
-      els.grid.innerHTML = state.filtered.map((product) => {
+      els.grid.innerHTML = pageProducts.map((product) => {
         const price = priceMarkup(product);
         const meta = [product.family, product.design || product.subfamily, product.city].filter(Boolean).join(' · ');
         return `
@@ -1044,6 +1091,22 @@
           </article>
         `;
       }).join('');
+
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      if (totalPages <= 1) {
+        els.pagination.innerHTML = '';
+        return;
+      }
+
+      const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+      els.pagination.innerHTML = `
+        <button type="button" data-page-action="prev" ${state.page === 1 ? 'disabled' : ''}>‹</button>
+        ${pages.map((page) => `<button type="button" class="${page === state.page ? 'is-active' : ''}" data-page="${page}">${page}</button>`).join('')}
+        <button type="button" data-page-action="next" ${state.page === totalPages ? 'disabled' : ''}>›</button>
+      `;
     }
 
     function priceMarkup(product) {
@@ -1068,8 +1131,9 @@
       renderDetails(product);
 
       const location = [product.address, product.city].filter(Boolean).join(', ');
+      const branch = cleanBranchName(product.branch);
       els.modalLocation.innerHTML = `
-        <strong>Disponible en ${escapeHtml(product.branch || product.city || 'sucursal')}</strong><br>
+        <strong>Disponible en ${escapeHtml(branch || product.city || 'sucursal')}</strong><br>
         ${escapeHtml(location || 'Consulta la direccion por WhatsApp.')}
       `;
 
@@ -1099,10 +1163,7 @@
         ['Calidad de Metal', product.metal],
         ['Peso', product.weight ? `${product.weight} gr` : ''],
         ['Talla', product.size],
-        ['Familia', product.family],
-        ['Subfamilia', product.subfamily],
-        ['Diseño', product.design],
-        ['Sucursal', product.branch]
+        ['Sucursal', cleanBranchName(product.branch)]
       ].filter(([, value]) => value);
 
       els.modalDetails.innerHTML = rows.map(([label, value]) => `
@@ -1127,18 +1188,11 @@
         .replace(/'/g, '&#039;');
     }
 
-    function setStats() {
-      els.statProducts.textContent = state.products.length;
-      els.statCities.textContent = new Set(state.products.map((p) => p.city).filter(Boolean)).size;
-      els.statFamilies.textContent = new Set(state.products.map((p) => p.family).filter(Boolean)).size;
-    }
-
     function loadCatalog(text) {
       const rows = parseCSV(text);
       state.products = rows.map(productFromRow).filter((product) => product.published && product.name && product.sku);
       state.filtered = [...state.products];
       refreshFilters();
-      setStats();
       applyFilters();
     }
 
@@ -1164,6 +1218,23 @@
     els.grid.addEventListener('click', (event) => {
       const button = event.target.closest('[data-sku]');
       if (button) openProduct(button.dataset.sku);
+    });
+
+    els.pagination.addEventListener('click', (event) => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      const totalPages = Math.max(1, Math.ceil(state.filtered.length / PRODUCTS_PER_PAGE));
+
+      if (button.dataset.page) {
+        state.page = Number(button.dataset.page);
+      } else if (button.dataset.pageAction === 'prev') {
+        state.page = Math.max(1, state.page - 1);
+      } else if (button.dataset.pageAction === 'next') {
+        state.page = Math.min(totalPages, state.page + 1);
+      }
+
+      renderProducts();
+      document.querySelector('.catalog-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     els.modalThumbs.addEventListener('click', (event) => {
