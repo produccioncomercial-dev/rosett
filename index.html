@@ -81,6 +81,11 @@
       flex: 0 0 auto;
     }
 
+    .brand-home {
+      display: inline-flex;
+      align-items: center;
+    }
+
     .brand-logo {
       display: block;
       width: auto;
@@ -143,7 +148,7 @@
     .main-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 2px;
       margin-left: auto;
     }
 
@@ -159,8 +164,10 @@
       color: #edf3fb;
       background: transparent;
       text-decoration: none;
-      font-weight: 850;
-      letter-spacing: .02em;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
 
     .nav-link:hover,
@@ -170,7 +177,7 @@
       background: rgba(255,255,255,.1);
     }
 
-    .nav-trigger::after {
+    .nav-trigger.has-menu::after {
       content: "";
       width: 7px;
       height: 7px;
@@ -185,10 +192,10 @@
 
     .mega-menu {
       position: absolute;
-      right: 0;
+      left: 0;
       top: calc(100% + 14px);
       z-index: 50;
-      width: min(760px, calc(100vw - 32px));
+      width: min(360px, calc(100vw - 32px));
       max-height: min(68vh, 620px);
       overflow: auto;
       padding: 18px;
@@ -220,7 +227,7 @@
 
     .category-tree {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 10px;
     }
 
@@ -1480,16 +1487,16 @@
   <header class="site-header">
     <div class="header-inner">
       <div class="brand" aria-label="Rossett Joyería de Plata">
-        <img class="brand-logo" src="logorosett.png" alt="Rossett Joyería de plata">
+        <a class="brand-home" href="/" id="brandHome" aria-label="Ir a Inicio">
+          <img class="brand-logo" src="logorosett.png" alt="Rossett Joyería de plata">
+        </a>
       </div>
       <div class="site-search">
         <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño" autocomplete="off">
       </div>
       <nav class="main-nav" aria-label="Navegación principal">
-        <div class="nav-dropdown">
-          <button class="nav-trigger" type="button" aria-haspopup="true">Joyas</button>
-          <div class="mega-menu" id="categoryMenu"></div>
-        </div>
+        <a class="nav-link" href="/" data-home-link>Inicio</a>
+        <div id="categoryMenu"></div>
         <a class="nav-link" href="#" aria-disabled="true">Tiendas</a>
       </nav>
       <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-label="Abrir menú"></button>
@@ -1939,7 +1946,43 @@
       const tree = categoryTree();
       const families = [...tree.keys()].sort((a, b) => a.localeCompare(b, 'es'));
       return `
-        <p class="category-menu-title">Categorías</p>
+        ${families.map((family) => {
+          const subfamilies = [...tree.get(family).keys()].sort((a, b) => a.localeCompare(b, 'es'));
+          return `
+            <div class="nav-dropdown">
+              <a class="nav-trigger has-menu" href="${escapeHtml(categoryUrl([family]))}" data-category-path="${escapeHtml(family)}">${escapeHtml(family)}</a>
+              <div class="mega-menu">
+                <p class="category-menu-title">${escapeHtml(family)}</p>
+                <div class="category-tree">
+                  ${subfamilies.map((subfamily) => {
+                    const designs = [...tree.get(family).get(subfamily)].sort((a, b) => a.localeCompare(b, 'es'));
+                    const subPath = `${family}|${subfamily}`;
+                    return `
+                      <details class="category-group">
+                        <summary>${escapeHtml(subfamily)}</summary>
+                        <div class="category-subtree">
+                          <a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily]))}" data-category-path="${escapeHtml(subPath)}">Ver todo ${escapeHtml(subfamily)}</a>
+                          ${designs.map((design) => {
+                            const designPath = `${family}|${subfamily}|${design}`;
+                            return `<a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily, design]))}" data-category-path="${escapeHtml(designPath)}">${escapeHtml(design)}</a>`;
+                          }).join('')}
+                        </div>
+                      </details>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      `;
+    }
+
+    function mobileCategoryMenuMarkup() {
+      const tree = categoryTree();
+      const families = [...tree.keys()].sort((a, b) => a.localeCompare(b, 'es'));
+      return `
+        <a class="nav-link" href="${escapeHtml(pageUrl(1))}" data-home-link>Inicio</a>
         <div class="category-tree">
           ${families.map((family) => {
             const subfamilies = [...tree.get(family).keys()].sort((a, b) => a.localeCompare(b, 'es'));
@@ -1954,14 +1997,12 @@
                     return `
                       <div>
                         <a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily]))}" data-category-path="${escapeHtml(subPath)}">${escapeHtml(subfamily)}</a>
-                        ${designs.length ? `
-                          <div class="category-designs">
-                            ${designs.map((design) => {
-                              const designPath = `${family}|${subfamily}|${design}`;
-                              return `<a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily, design]))}" data-category-path="${escapeHtml(designPath)}">${escapeHtml(design)}</a>`;
-                            }).join('')}
-                          </div>
-                        ` : ''}
+                        <div class="category-designs">
+                          ${designs.map((design) => {
+                            const designPath = `${family}|${subfamily}|${design}`;
+                            return `<a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily, design]))}" data-category-path="${escapeHtml(designPath)}">${escapeHtml(design)}</a>`;
+                          }).join('')}
+                        </div>
                       </div>
                     `;
                   }).join('')}
@@ -1974,9 +2015,8 @@
     }
 
     function renderCategoryMenus() {
-      const markup = categoryMenuMarkup();
-      els.categoryMenu.innerHTML = markup;
-      els.mobileCategoryMenu.innerHTML = markup;
+      els.categoryMenu.innerHTML = categoryMenuMarkup();
+      els.mobileCategoryMenu.innerHTML = mobileCategoryMenuMarkup();
     }
 
     function refreshFilters() {
@@ -2195,11 +2235,14 @@
     }
 
     function showCatalog() {
-      els.hero.style.display = '';
       els.catalog.style.display = '';
       els.modal.classList.remove('is-open');
       document.body.classList.remove('modal-open');
       state.activeProduct = null;
+    }
+
+    function setHeroVisible(visible) {
+      els.hero.style.display = visible ? '' : 'none';
     }
 
     function findCategoryFromRoute(route) {
@@ -2231,6 +2274,7 @@
       state.category = category || { family: '', subfamily: '', design: '' };
       state.page = 1;
       showCatalog();
+      setHeroVisible(false);
       applyFilters(false);
       if (updateUrl) {
         const parts = [state.category.family, state.category.subfamily, state.category.design].filter(Boolean);
@@ -2247,6 +2291,7 @@
         state.page = 1;
         state.category = { family: '', subfamily: '', design: '' };
         showCatalog();
+        setHeroVisible(true);
         renderProducts();
         return;
       }
@@ -2255,6 +2300,7 @@
         state.page = maybePage;
         state.category = { family: '', subfamily: '', design: '' };
         showCatalog();
+        setHeroVisible(false);
         renderProducts();
         return;
       }
@@ -2266,6 +2312,7 @@
       }
 
       openProduct(route);
+      setHeroVisible(false);
     }
 
     let activeZoomable = null;
@@ -2410,6 +2457,18 @@
       const [family = '', subfamily = '', design = ''] = categoryLink.dataset.categoryPath.split('|');
       setCategory({ family, subfamily, design });
       closeMobileNav();
+    });
+
+    document.addEventListener('click', (event) => {
+      const homeLink = event.target.closest('[data-home-link], .brand-home');
+      if (!homeLink) return;
+      event.preventDefault();
+      state.category = { family: '', subfamily: '', design: '' };
+      state.page = 1;
+      els.search.value = '';
+      closeMobileNav();
+      window.history.pushState({}, '', pageUrl(1));
+      renderRoute();
     });
 
     els.mobileNavToggle.addEventListener('click', () => {
