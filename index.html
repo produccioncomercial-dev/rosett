@@ -9,6 +9,7 @@
     :root {
       --navy: #071b3a;
       --navy-2: #0c2a55;
+      --ecogold: #459939;
       --silver: #bfc5ce;
       --silver-2: #e7eaf0;
       --ink: #162033;
@@ -55,7 +56,7 @@
 
     .site-header {
       position: sticky;
-      top: 0;
+      top: 34px;
       z-index: 20;
       background: var(--navy);
       color: white;
@@ -94,6 +95,50 @@
       color: #dbe2ee;
       font-size: .92rem;
       text-align: right;
+    }
+
+    .ecogold-ticker {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+      background: var(--ecogold);
+      box-shadow: 0 8px 22px rgba(69, 153, 57, .22);
+    }
+
+    .ecogold-ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerMove 26s linear infinite;
+      will-change: transform;
+    }
+
+    .ecogold-ticker span {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      padding: 0 34px;
+      font-weight: 800;
+      font-size: .92rem;
+    }
+
+    .ecogold-ticker span::before,
+    .ecogold-ticker span::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      margin: 0 16px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.72);
+    }
+
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
 
     .hero {
@@ -676,6 +721,82 @@
       padding-left: 14px;
     }
 
+    .ecogold-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin: 18px 0;
+      padding: 15px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      color: white;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(255,255,255,.22), transparent 24%),
+        linear-gradient(135deg, #459939, #2f7b28);
+      box-shadow: 0 16px 34px rgba(69, 153, 57, .22);
+    }
+
+    .ecogold-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.14), transparent);
+      transform: translateX(-100%);
+      animation: ecoShine 4.8s ease-in-out infinite;
+    }
+
+    .eco-leaf {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.36);
+      animation: leafFloat 2.8s ease-in-out infinite;
+    }
+
+    .eco-leaf svg {
+      width: 34px;
+      height: 34px;
+      fill: #e9ffd9;
+      filter: drop-shadow(0 4px 7px rgba(0,0,0,.18));
+    }
+
+    .ecogold-text span {
+      display: block;
+      font-size: .85rem;
+      opacity: .92;
+      font-weight: 700;
+    }
+
+    .ecogold-text strong {
+      display: block;
+      margin-top: 2px;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      line-height: 1;
+    }
+
+    .ecogold-text small {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255,255,255,.84);
+      font-weight: 650;
+    }
+
+    @keyframes leafFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-4px) rotate(6deg); }
+    }
+
+    @keyframes ecoShine {
+      0%, 52% { transform: translateX(-105%); }
+      78%, 100% { transform: translateX(105%); }
+    }
+
     .detail-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1015,6 +1136,14 @@
   </style>
 </head>
 <body>
+  <div class="ecogold-ticker" aria-label="Programa Puntos EcoGold">
+    <div class="ecogold-ticker-track">
+      <span>Obtén puntos EcoGold al adquirir nuestras joyas de plata y canjealos por dinero y fantásticos premios</span>
+      <span>Obtén puntos EcoGold al adquirir nuestras joyas de plata y canjealos por dinero y fantásticos premios</span>
+      <span>Obtén puntos EcoGold al adquirir nuestras joyas de plata y canjealos por dinero y fantásticos premios</span>
+      <span>Obtén puntos EcoGold al adquirir nuestras joyas de plata y canjealos por dinero y fantásticos premios</span>
+    </div>
+  </div>
   <header class="site-header">
     <div class="header-inner">
       <div class="brand" aria-label="Rossett Joyería de Plata">
@@ -1122,6 +1251,7 @@
           <h3 id="modalTitle"></h3>
           <p class="sku" id="modalSku"></p>
           <div class="price-row" id="modalPrice"></div>
+          <div id="modalEcoGold" class="ecogold-card"></div>
           <p class="story" id="modalDescription"></p>
           <div class="detail-grid" id="modalDetails"></div>
           <div class="location-box" id="modalLocation"></div>
@@ -1213,6 +1343,7 @@
       modalTitle: $('#modalTitle'),
       modalSku: $('#modalSku'),
       modalPrice: $('#modalPrice'),
+      modalEcoGold: $('#modalEcoGold'),
       modalDescription: $('#modalDescription'),
       modalDetails: $('#modalDetails'),
       modalLocation: $('#modalLocation'),
@@ -1550,6 +1681,32 @@
       return discount > 0 ? `${discount}% OFF` : '';
     }
 
+    function finalPrice(product) {
+      const regular = parsePrice(product.regularPrice);
+      const sale = parsePrice(product.salePrice);
+      return sale && sale < regular ? sale : regular;
+    }
+
+    function ecoGoldPoints(product) {
+      return Math.floor(finalPrice(product) / 3.5);
+    }
+
+    function ecoGoldMarkup(product) {
+      const points = ecoGoldPoints(product);
+      return `
+        <div class="eco-leaf" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <path d="M52.7 7.4C36.2 8.1 22.3 14.7 14 25.6 7.7 33.9 8 43.8 14.8 50.1c7.2 6.6 18.1 5.8 26.2-1.9 8.6-8.2 12.5-21.6 11.7-40.8ZM18.9 45.2c6.2-11.5 15.5-19.8 27.7-24.8-9.7 6.8-17 15.7-22 26.8 5.5 1.9 11.7.3 16.4-4.3 5.3-5.2 8-13.4 8.2-25-12.1 1.7-22 6.5-28 13.7-4.5 5.3-5.3 10.2-2.3 13.6Z"/>
+          </svg>
+        </div>
+        <div class="ecogold-text">
+          <span>Al comprar esta joya obtienes</span>
+          <strong>${points} Puntos EcoGold</strong>
+          <small>Puntos calculados con el precio final de compra</small>
+        </div>
+      `;
+    }
+
     function openProduct(sku) {
       const product = state.products.find((item) => item.sku === sku);
       if (!product) {
@@ -1561,6 +1718,7 @@
       els.modalTitle.textContent = product.name;
       els.modalSku.textContent = `SKU ${product.sku}`;
       els.modalPrice.innerHTML = priceMarkup(product);
+      els.modalEcoGold.innerHTML = ecoGoldMarkup(product);
       els.modalDescription.textContent = product.description || 'Una joya de plata pensada para acompanar momentos especiales.';
       renderGallery(product, 0);
       renderDetails(product);
