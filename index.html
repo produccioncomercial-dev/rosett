@@ -67,19 +67,18 @@
     }
 
     .header-inner {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1500px, calc(100% - 32px));
       margin: 0 auto;
       min-height: 74px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      gap: 22px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      min-width: 210px;
+      flex: 0 0 auto;
     }
 
     .brand-logo {
@@ -88,6 +87,221 @@
       max-width: 168px;
       height: 52px;
       object-fit: contain;
+    }
+
+    .site-search {
+      flex: 1 1 420px;
+      max-width: 560px;
+      position: relative;
+    }
+
+    .site-search::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      border: 2px solid #71809a;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+
+    .site-search::after {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      width: 8px;
+      height: 2px;
+      border-radius: 999px;
+      background: #71809a;
+      transform: translateY(6px) rotate(45deg);
+      transform-origin: left center;
+    }
+
+    .site-search input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid rgba(191, 197, 206, .42);
+      border-radius: 999px;
+      padding: 0 18px 0 44px;
+      color: white;
+      background: rgba(255,255,255,.08);
+      outline: none;
+    }
+
+    .site-search input::placeholder {
+      color: #cbd4e3;
+    }
+
+    .site-search input:focus {
+      border-color: rgba(255,255,255,.72);
+      box-shadow: 0 0 0 4px rgba(191, 197, 206, .16);
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .nav-link,
+    .nav-trigger {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: var(--radius);
+      color: #edf3fb;
+      background: transparent;
+      text-decoration: none;
+      font-weight: 850;
+      letter-spacing: .02em;
+    }
+
+    .nav-link:hover,
+    .nav-trigger:hover,
+    .nav-dropdown:focus-within .nav-trigger,
+    .nav-dropdown:hover .nav-trigger {
+      background: rgba(255,255,255,.1);
+    }
+
+    .nav-trigger::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 1.8px solid currentColor;
+      border-bottom: 1.8px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+    }
+
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .mega-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 14px);
+      z-index: 50;
+      width: min(760px, calc(100vw - 32px));
+      max-height: min(68vh, 620px);
+      overflow: auto;
+      padding: 18px;
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: 0 24px 80px rgba(7, 27, 58, .18);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+    }
+
+    .nav-dropdown:hover .mega-menu,
+    .nav-dropdown:focus-within .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .category-menu-title {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .category-tree {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .category-group {
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .category-group > summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 12px;
+      color: var(--navy);
+      cursor: pointer;
+      font-weight: 850;
+    }
+
+    .category-group > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .category-group > summary::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid var(--navy);
+      border-bottom: 2px solid var(--navy);
+      transform: rotate(45deg);
+      transition: transform .18s ease;
+      flex: 0 0 auto;
+    }
+
+    .category-group[open] > summary::after {
+      transform: rotate(225deg);
+    }
+
+    .category-subtree {
+      display: grid;
+      gap: 7px;
+      padding: 0 12px 12px;
+    }
+
+    .category-link {
+      display: block;
+      padding: 7px 9px;
+      border-radius: var(--radius);
+      color: #364255;
+      text-decoration: none;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+
+    .category-link:hover,
+    .category-link.is-active {
+      color: var(--navy);
+      background: white;
+      box-shadow: inset 3px 0 0 var(--silver);
+    }
+
+    .category-designs {
+      display: grid;
+      gap: 3px;
+      margin: 4px 0 8px 10px;
+      padding-left: 10px;
+      border-left: 1px solid var(--line);
+    }
+
+    .category-designs .category-link {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .mobile-nav-toggle,
+    .mobile-nav-backdrop,
+    .mobile-nav-drawer {
+      display: none;
     }
 
     .header-actions {
@@ -269,7 +483,7 @@
     }
 
     .toolbar {
-      display: grid;
+      display: none;
       grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(150px, 1fr));
       gap: 10px;
       align-items: center;
@@ -926,11 +1140,123 @@
       }
 
       .header-inner {
-        min-height: 66px;
+        min-height: 74px;
+        gap: 10px;
       }
 
       .header-actions {
         display: none;
+      }
+
+      .brand-logo {
+        height: 42px;
+        max-width: 92px;
+      }
+
+      .site-search {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .site-search input {
+        height: 40px;
+        padding-right: 12px;
+        font-size: .86rem;
+      }
+
+      .main-nav {
+        display: none;
+      }
+
+      .mobile-nav-toggle {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,.26);
+        border-radius: 50%;
+        color: white;
+        background: rgba(255,255,255,.08);
+      }
+
+      .mobile-nav-toggle::before {
+        content: "";
+        width: 18px;
+        height: 13px;
+        background:
+          linear-gradient(currentColor, currentColor) 0 0 / 18px 2px no-repeat,
+          linear-gradient(currentColor, currentColor) 0 6px / 18px 2px no-repeat,
+          linear-gradient(currentColor, currentColor) 0 12px / 18px 2px no-repeat;
+      }
+
+      .mobile-nav-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 54;
+        display: block;
+        pointer-events: none;
+        background: rgba(7, 27, 58, .32);
+        opacity: 0;
+        transition: opacity .24s ease;
+      }
+
+      .mobile-nav-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 55;
+        width: min(82vw, 330px);
+        height: 100dvh;
+        display: block;
+        overflow-y: auto;
+        padding: 18px 14px;
+        background: white;
+        box-shadow: -18px 0 46px rgba(7, 27, 58, .18);
+        transform: translateX(105%);
+        transition: transform .3s cubic-bezier(.22, .78, .21, 1);
+      }
+
+      body.mobile-nav-open .mobile-nav-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      body.mobile-nav-open .mobile-nav-drawer {
+        transform: translateX(0);
+      }
+
+      .mobile-nav-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+        color: var(--navy);
+        font-weight: 900;
+      }
+
+      .mobile-nav-close {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: white;
+        color: var(--navy);
+        font-size: 1.25rem;
+      }
+
+      .mobile-nav-drawer .category-tree {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-nav-drawer .nav-link {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 12px;
+        color: var(--navy);
+        background: var(--soft);
       }
 
       .hero-inner {
@@ -952,6 +1278,10 @@
         color: white;
         background: var(--navy);
         box-shadow: 0 12px 28px rgba(7, 27, 58, .24);
+      }
+
+      .filter-toggle {
+        display: none;
       }
 
       .filter-toggle::before {
@@ -1152,11 +1482,28 @@
       <div class="brand" aria-label="Rossett Joyería de Plata">
         <img class="brand-logo" src="logorosett.png" alt="Rossett Joyería de plata">
       </div>
-      <div class="header-actions">
-        <span>Una marca de Inticash</span>
+      <div class="site-search">
+        <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño" autocomplete="off">
       </div>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <div class="nav-dropdown">
+          <button class="nav-trigger" type="button" aria-haspopup="true">Joyas</button>
+          <div class="mega-menu" id="categoryMenu"></div>
+        </div>
+        <a class="nav-link" href="#" aria-disabled="true">Tiendas</a>
+      </nav>
+      <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-label="Abrir menú"></button>
     </div>
   </header>
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Menú móvil">
+    <div class="mobile-nav-head">
+      <span>Joyas</span>
+      <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Cerrar menú">×</button>
+    </div>
+    <div id="mobileCategoryMenu"></div>
+    <a class="nav-link" href="#" aria-disabled="true">Tiendas</a>
+  </aside>
 
   <section class="hero">
     <div class="hero-inner">
@@ -1195,7 +1542,7 @@
           <button class="filter-close" id="filterClose" type="button" aria-label="Cerrar filtros">×</button>
         </div>
         <div class="field">
-          <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño">
+          <input id="legacySearchInput" type="search" placeholder="Buscar por nombre, SKU o diseño">
         </div>
         <div class="field">
           <select id="familyFilter" aria-label="Filtrar por familia">
@@ -1311,6 +1658,7 @@
       products: [],
       filtered: [],
       page: 1,
+      category: { family: '', subfamily: '', design: '' },
       bannerIndex: 0,
       bannerTimer: null,
       returnUrl: '',
@@ -1325,6 +1673,11 @@
       fallback: $('#csvFallback'),
       csvInput: $('#csvInput'),
       search: $('#searchInput'),
+      categoryMenu: $('#categoryMenu'),
+      mobileCategoryMenu: $('#mobileCategoryMenu'),
+      mobileNavToggle: $('#mobileNavToggle'),
+      mobileNavClose: $('#mobileNavClose'),
+      mobileNavBackdrop: $('#mobileNavBackdrop'),
       filterToggle: $('#filterToggle'),
       filterClose: $('#filterClose'),
       filterBackdrop: $('#filterBackdrop'),
@@ -1484,6 +1837,10 @@
       return `${appBasePath()}${encodeURIComponent(sku)}`;
     }
 
+    function categoryUrl(parts) {
+      return `${appBasePath()}${parts.filter(Boolean).map((part) => encodeURIComponent(part)).join('/')}`;
+    }
+
     function absoluteProductUrl(sku) {
       return new URL(productUrl(sku), window.location.origin).href;
     }
@@ -1566,6 +1923,62 @@
       return `<option value="">${placeholder}</option>` + unique.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
     }
 
+    function categoryTree() {
+      const tree = new Map();
+      state.products.forEach((product) => {
+        if (!tree.has(product.family)) tree.set(product.family, new Map());
+        const subfamilies = tree.get(product.family);
+        const subfamily = product.subfamily || 'Otros';
+        if (!subfamilies.has(subfamily)) subfamilies.set(subfamily, new Set());
+        if (product.design) subfamilies.get(subfamily).add(product.design);
+      });
+      return tree;
+    }
+
+    function categoryMenuMarkup() {
+      const tree = categoryTree();
+      const families = [...tree.keys()].sort((a, b) => a.localeCompare(b, 'es'));
+      return `
+        <p class="category-menu-title">Categorías</p>
+        <div class="category-tree">
+          ${families.map((family) => {
+            const subfamilies = [...tree.get(family).keys()].sort((a, b) => a.localeCompare(b, 'es'));
+            return `
+              <details class="category-group">
+                <summary>${escapeHtml(family)}</summary>
+                <div class="category-subtree">
+                  <a class="category-link" href="${escapeHtml(categoryUrl([family]))}" data-category-path="${escapeHtml(family)}">Ver todo ${escapeHtml(family)}</a>
+                  ${subfamilies.map((subfamily) => {
+                    const designs = [...tree.get(family).get(subfamily)].sort((a, b) => a.localeCompare(b, 'es'));
+                    const subPath = `${family}|${subfamily}`;
+                    return `
+                      <div>
+                        <a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily]))}" data-category-path="${escapeHtml(subPath)}">${escapeHtml(subfamily)}</a>
+                        ${designs.length ? `
+                          <div class="category-designs">
+                            ${designs.map((design) => {
+                              const designPath = `${family}|${subfamily}|${design}`;
+                              return `<a class="category-link" href="${escapeHtml(categoryUrl([family, subfamily, design]))}" data-category-path="${escapeHtml(designPath)}">${escapeHtml(design)}</a>`;
+                            }).join('')}
+                          </div>
+                        ` : ''}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </details>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderCategoryMenus() {
+      const markup = categoryMenuMarkup();
+      els.categoryMenu.innerHTML = markup;
+      els.mobileCategoryMenu.innerHTML = markup;
+    }
+
     function refreshFilters() {
       const family = els.family.value;
       const subfamily = els.subfamily.value;
@@ -1589,23 +2002,22 @@
 
     function applyFilters(updateUrl = true) {
       const query = normalizeText(els.search.value);
-      const family = els.family.value;
-      const subfamily = els.subfamily.value;
-      const design = els.design.value;
-      const city = els.city.value;
+      const { family, subfamily, design } = state.category;
 
       state.filtered = state.products.filter((product) => {
         const searchable = normalizeText(`${product.name} ${product.sku} ${product.family} ${product.subfamily} ${product.design} ${product.city}`);
         return (!query || searchable.includes(query))
           && (!family || product.family === family)
           && (!subfamily || product.subfamily === subfamily)
-          && (!design || product.design === design)
-          && (!city || product.city === city);
+          && (!design || product.design === design);
       });
 
       state.page = 1;
       renderProducts();
-      if (updateUrl && !state.activeProduct) window.history.replaceState({}, '', pageUrl(1));
+      if (updateUrl && !state.activeProduct) {
+        const parts = [state.category.family, state.category.subfamily, state.category.design].filter(Boolean);
+        window.history.replaceState({}, '', parts.length ? categoryUrl(parts) : pageUrl(1));
+      }
     }
 
     function renderProducts() {
@@ -1614,6 +2026,8 @@
       if (state.page > totalPages) state.page = totalPages;
       const start = (state.page - 1) * PRODUCTS_PER_PAGE;
       const pageProducts = state.filtered.slice(start, start + PRODUCTS_PER_PAGE);
+      const activeTitle = [state.category.family, state.category.subfamily, state.category.design].filter(Boolean).join(' / ');
+      document.querySelector('#catalogTitle').textContent = activeTitle || 'Catálogo disponible';
       els.resultCount.textContent = `${state.filtered.length} ${state.filtered.length === 1 ? 'producto' : 'productos'} · Página ${state.page} de ${totalPages}`;
 
       if (!state.filtered.length) {
@@ -1788,6 +2202,42 @@
       state.activeProduct = null;
     }
 
+    function findCategoryFromRoute(route) {
+      const parts = route.split('/').map((part) => part.trim()).filter(Boolean);
+      if (!parts.length) return null;
+      const matchPart = (value, part) => normalizeText(value) === normalizeText(part);
+      const family = [...new Set(state.products.map((product) => product.family))]
+        .find((value) => matchPart(value, parts[0]));
+      if (!family) return null;
+
+      const familyProducts = state.products.filter((product) => product.family === family);
+      const subfamily = parts[1]
+        ? [...new Set(familyProducts.map((product) => product.subfamily).filter(Boolean))]
+          .find((value) => matchPart(value, parts[1]))
+        : '';
+      if (parts[1] && !subfamily) return null;
+
+      const subfamilyProducts = subfamily ? familyProducts.filter((product) => product.subfamily === subfamily) : familyProducts;
+      const design = parts[2]
+        ? [...new Set(subfamilyProducts.map((product) => product.design).filter(Boolean))]
+          .find((value) => matchPart(value, parts[2]))
+        : '';
+      if (parts[2] && !design) return null;
+
+      return { family, subfamily: subfamily || '', design: design || '' };
+    }
+
+    function setCategory(category, updateUrl = true) {
+      state.category = category || { family: '', subfamily: '', design: '' };
+      state.page = 1;
+      showCatalog();
+      applyFilters(false);
+      if (updateUrl) {
+        const parts = [state.category.family, state.category.subfamily, state.category.design].filter(Boolean);
+        window.history.pushState({}, '', parts.length ? categoryUrl(parts) : pageUrl(1));
+      }
+    }
+
     function renderRoute() {
       if (!state.products.length) return;
       const route = currentRoute();
@@ -1795,6 +2245,7 @@
 
       if (!route) {
         state.page = 1;
+        state.category = { family: '', subfamily: '', design: '' };
         showCatalog();
         renderProducts();
         return;
@@ -1802,8 +2253,15 @@
 
       if (Number.isInteger(maybePage) && maybePage > 0) {
         state.page = maybePage;
+        state.category = { family: '', subfamily: '', design: '' };
         showCatalog();
         renderProducts();
+        return;
+      }
+
+      const category = findCategoryFromRoute(route);
+      if (category) {
+        setCategory(category, false);
         return;
       }
 
@@ -1917,6 +2375,7 @@
       state.products = rows.map(productFromRow).filter((product) => product.published && product.name && product.sku);
       state.filtered = [...state.products];
       refreshFilters();
+      renderCategoryMenus();
       applyFilters(false);
       renderRoute();
     }
@@ -1939,6 +2398,26 @@
         applyFilters();
       });
     });
+
+    function closeMobileNav() {
+      document.body.classList.remove('mobile-nav-open');
+    }
+
+    document.addEventListener('click', (event) => {
+      const categoryLink = event.target.closest('[data-category-path]');
+      if (!categoryLink) return;
+      event.preventDefault();
+      const [family = '', subfamily = '', design = ''] = categoryLink.dataset.categoryPath.split('|');
+      setCategory({ family, subfamily, design });
+      closeMobileNav();
+    });
+
+    els.mobileNavToggle.addEventListener('click', () => {
+      document.body.classList.add('mobile-nav-open');
+    });
+
+    els.mobileNavClose.addEventListener('click', closeMobileNav);
+    els.mobileNavBackdrop.addEventListener('click', closeMobileNav);
 
     els.grid.addEventListener('click', (event) => {
       const link = event.target.closest('[data-product-link]');
