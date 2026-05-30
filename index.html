@@ -44,6 +44,10 @@
       cursor: pointer;
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     img {
       max-width: 100%;
       display: block;
@@ -561,9 +565,13 @@
     }
 
     .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
       display: none;
-      background: white;
-      padding: 24px 0 60px;
+      background: rgba(7, 27, 58, .72);
+      padding: 24px;
+      overflow-y: auto;
     }
 
     .modal.is-open {
@@ -572,17 +580,17 @@
 
     .modal-card {
       width: min(980px, 100%);
-      margin: 0 auto;
+      margin: 20px auto;
       background: white;
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: 0 30px 90px rgba(0,0,0,.28);
       border: 1px solid var(--silver);
     }
 
     .modal-top {
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end;
       padding: 12px;
       background: var(--navy);
     }
@@ -946,7 +954,7 @@
       }
 
       .modal {
-        padding: 12px 0 42px;
+        padding: 10px;
       }
 
       .modal-body {
@@ -1099,7 +1107,7 @@
   <section id="productModal" class="modal" aria-labelledby="modalTitle">
     <article class="modal-card">
       <div class="modal-top">
-        <button class="ghost-button" id="closeModal" type="button" aria-label="Volver al catálogo">← Volver al catálogo</button>
+        <button class="close-button" id="closeModal" type="button" aria-label="Cerrar detalle">×</button>
       </div>
       <div class="modal-body">
         <div>
@@ -1172,6 +1180,7 @@
       page: 1,
       bannerIndex: 0,
       bannerTimer: null,
+      returnUrl: '',
       activeProduct: null
     };
 
@@ -1339,6 +1348,10 @@
 
     function productUrl(sku) {
       return `${appBasePath()}${encodeURIComponent(sku)}`;
+    }
+
+    function absoluteProductUrl(sku) {
+      return new URL(productUrl(sku), window.location.origin).href;
     }
 
     function navigateTo(url) {
@@ -1545,8 +1558,6 @@
       }
 
       state.activeProduct = product;
-      els.hero.style.display = 'none';
-      els.catalog.style.display = 'none';
       els.modalTitle.textContent = product.name;
       els.modalSku.textContent = `SKU ${product.sku}`;
       els.modalPrice.innerHTML = priceMarkup(product);
@@ -1562,11 +1573,12 @@
       `;
 
       const phone = String(product.phone || '').replace(/\D/g, '');
-      const message = encodeURIComponent(`Hola, quiero comprar la joya "${product.name}" con SKU ${product.sku}. ¿Sigue disponible?`);
+      const productLink = absoluteProductUrl(product.sku);
+      const message = encodeURIComponent(`Hola, quiero comprar la joya "${product.name}" con SKU ${product.sku}. ¿Sigue disponible?\n\nLink del producto: ${productLink}`);
       els.modalWhatsapp.href = `https://wa.me/51${phone}?text=${message}`;
 
       els.modal.classList.add('is-open');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.classList.add('modal-open');
     }
 
     function renderGallery(product, activeIndex) {
@@ -1600,14 +1612,18 @@
 
     function closeProduct() {
       els.modal.classList.remove('is-open');
-      showCatalog();
-      navigateTo(pageUrl(state.page));
+      document.body.classList.remove('modal-open');
+      state.activeProduct = null;
+      const targetUrl = state.returnUrl || pageUrl(state.page);
+      state.returnUrl = '';
+      window.history.pushState({}, '', targetUrl);
     }
 
     function showCatalog() {
       els.hero.style.display = '';
       els.catalog.style.display = '';
       els.modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
       state.activeProduct = null;
     }
 
@@ -1767,6 +1783,7 @@
       const link = event.target.closest('[data-product-link]');
       if (!link) return;
       event.preventDefault();
+      state.returnUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
       navigateTo(link.getAttribute('href'));
     });
 
@@ -1814,6 +1831,9 @@
 
     els.closeModal.addEventListener('click', closeProduct);
     els.modalCloseBottom.addEventListener('click', closeProduct);
+    els.modal.addEventListener('click', (event) => {
+      if (event.target === els.modal) closeProduct();
+    });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && state.activeProduct) closeProduct();
     });
