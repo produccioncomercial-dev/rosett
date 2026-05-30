@@ -187,15 +187,6 @@
       background: rgba(255,255,255,.1);
     }
 
-    .nav-trigger.has-menu::after {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-right: 1.8px solid currentColor;
-      border-bottom: 1.8px solid currentColor;
-      transform: rotate(45deg) translateY(-2px);
-    }
-
     .nav-dropdown {
       position: relative;
     }
@@ -257,7 +248,10 @@
       padding: 11px 12px;
       color: var(--navy);
       cursor: pointer;
-      font-weight: 850;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
     .category-group > summary::-webkit-details-marker {
@@ -291,8 +285,11 @@
       border-radius: var(--radius);
       color: #364255;
       text-decoration: none;
-      font-weight: 650;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .05em;
       line-height: 1.25;
+      text-transform: uppercase;
     }
 
     .category-link:hover,
@@ -311,7 +308,7 @@
     }
 
     .category-designs .category-link {
-      font-size: .9rem;
+      font-size: .76rem;
       color: var(--muted);
     }
 
