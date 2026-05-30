@@ -725,10 +725,10 @@
       position: relative;
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 14px;
+      gap: 10px;
       align-items: center;
-      margin: 18px 0;
-      padding: 15px;
+      margin: 12px 0 18px;
+      padding: 11px 12px;
       overflow: hidden;
       border-radius: var(--radius);
       color: white;
@@ -749,8 +749,8 @@
     }
 
     .eco-leaf {
-      width: 54px;
-      height: 54px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
       border-radius: 50%;
@@ -760,15 +760,15 @@
     }
 
     .eco-leaf svg {
-      width: 34px;
-      height: 34px;
+      width: 27px;
+      height: 27px;
       fill: #e9ffd9;
       filter: drop-shadow(0 4px 7px rgba(0,0,0,.18));
     }
 
     .ecogold-text span {
       display: block;
-      font-size: .85rem;
+      font-size: .78rem;
       opacity: .92;
       font-weight: 700;
     }
@@ -776,15 +776,16 @@
     .ecogold-text strong {
       display: block;
       margin-top: 2px;
-      font-size: clamp(1.35rem, 3vw, 2rem);
+      font-size: clamp(1.12rem, 2.4vw, 1.55rem);
       line-height: 1;
     }
 
     .ecogold-text small {
       display: block;
-      margin-top: 5px;
+      margin-top: 4px;
       color: rgba(255,255,255,.84);
-      font-weight: 650;
+      font-weight: 400;
+      font-size: .76rem;
     }
 
     @keyframes leafFloat {
@@ -1251,9 +1252,9 @@
           <h3 id="modalTitle"></h3>
           <p class="sku" id="modalSku"></p>
           <div class="price-row" id="modalPrice"></div>
-          <div id="modalEcoGold" class="ecogold-card"></div>
           <p class="story" id="modalDescription"></p>
           <div class="detail-grid" id="modalDetails"></div>
+          <div id="modalEcoGold" class="ecogold-card"></div>
           <div class="location-box" id="modalLocation"></div>
           <div class="modal-actions">
             <a id="modalWhatsapp" class="whatsapp-button" target="_blank" rel="noopener">Comprar por WhatsApp</a>
