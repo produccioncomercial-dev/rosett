@@ -645,7 +645,8 @@
 
     body.solidarity-mode .catalog-shell::before,
     body.solidarity-mode .catalog-shell::after {
-      content: "☼  ⋆  ☁  ⌁  ♡  ☆  arcoiris  ☼  ⋆  ☁  ⌁  ♡  ☆  sol  ☁  ⋆  ♡";
+      content: "";
+      display: none;
       position: absolute;
       pointer-events: none;
       z-index: 0;
@@ -665,7 +666,7 @@
     }
 
     body.solidarity-mode .catalog-shell::after {
-      content: "☁  ⋆  ♡  arcoiris  ☆  ☼  ⌁  ☁  ⋆  ♡  niños  ☆  ☼  ⌁  ☁  ⋆";
+      content: "";
       right: -42%;
       bottom: 80px;
       color: var(--lupines-orange);
@@ -682,14 +683,140 @@
       z-index: 1;
     }
 
+    .solidarity-sky {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: none;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    body.solidarity-mode .solidarity-sky {
+      display: block;
+    }
+
+    .sky-icon {
+      position: absolute;
+      width: var(--s, 42px);
+      height: var(--s, 42px);
+      left: var(--x, 50%);
+      top: var(--y, 50%);
+      opacity: 0;
+      color: var(--c, var(--lupines-blue));
+      animation: skyFloat var(--d, 14s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    .sky-icon.sun {
+      border: 3px solid currentColor;
+      border-radius: 50%;
+      box-shadow:
+        0 -16px 0 -12px currentColor,
+        0 16px 0 -12px currentColor,
+        16px 0 0 -12px currentColor,
+        -16px 0 0 -12px currentColor,
+        12px 12px 0 -12px currentColor,
+        -12px 12px 0 -12px currentColor,
+        12px -12px 0 -12px currentColor,
+        -12px -12px 0 -12px currentColor;
+    }
+
+    .sky-icon.cloud {
+      width: calc(var(--s, 48px) * 1.35);
+      height: calc(var(--s, 48px) * .42);
+      margin-top: calc(var(--s, 48px) * .22);
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .sky-icon.cloud::before,
+    .sky-icon.cloud::after {
+      content: "";
+      position: absolute;
+      bottom: 26%;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .sky-icon.cloud::before {
+      width: 50%;
+      height: 115%;
+      left: 14%;
+    }
+
+    .sky-icon.cloud::after {
+      width: 38%;
+      height: 88%;
+      right: 16%;
+    }
+
+    .sky-icon.star {
+      background: currentColor;
+      clip-path: polygon(50% 0, 61% 34%, 98% 35%, 68% 56%, 79% 91%, 50% 70%, 21% 91%, 32% 56%, 2% 35%, 39% 34%);
+    }
+
+    .sky-icon.heart {
+      width: calc(var(--s, 34px) * .72);
+      height: calc(var(--s, 34px) * .72);
+      background: currentColor;
+      transform: rotate(-45deg);
+    }
+
+    .sky-icon.heart::before,
+    .sky-icon.heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .sky-icon.heart::before { top: -50%; left: 0; }
+    .sky-icon.heart::after { top: 0; left: 50%; }
+
+    .sky-icon.rainbow {
+      border: 4px solid currentColor;
+      border-bottom: 0;
+      border-radius: 999px 999px 0 0;
+      box-shadow: inset 0 4px 0 rgba(249, 156, 28, .72);
+    }
+
+    .sky-icon.bird {
+      width: calc(var(--s, 42px) * 1.2);
+      height: calc(var(--s, 42px) * .56);
+    }
+
+    .sky-icon.bird::before,
+    .sky-icon.bird::after {
+      content: "";
+      position: absolute;
+      width: 50%;
+      height: 80%;
+      top: 0;
+      border-top: 3px solid currentColor;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .sky-icon.bird::before {
+      left: 2%;
+      transform: rotate(12deg);
+    }
+
+    .sky-icon.bird::after {
+      right: 2%;
+      transform: rotate(-12deg);
+    }
+
     body.solidarity-mode .catalog-head h2 {
       color: var(--lupines-blue);
     }
 
     body.solidarity-mode .product-card.solidarity-product {
-      border: 2px solid var(--lupines-orange);
+      border: 4px solid var(--lupines-orange);
       box-shadow:
-        0 0 0 1px rgba(1, 92, 196, .18),
+        0 0 0 2px rgba(1, 92, 196, .22),
         0 14px 30px rgba(1, 92, 196, .10);
       animation: solidarityBorderPulse 3.4s ease-in-out infinite;
     }
@@ -701,7 +828,7 @@
       z-index: 1;
       pointer-events: none;
       border-radius: calc(var(--radius) - 3px);
-      border: 1px solid rgba(1, 92, 196, .32);
+      border: 2px solid rgba(1, 92, 196, .36);
     }
 
     body.solidarity-mode .product-card.solidarity-product .details-button {
@@ -729,11 +856,11 @@
     @keyframes solidarityBorderPulse {
       0%, 100% {
         border-color: var(--lupines-orange);
-        box-shadow: 0 0 0 1px rgba(1, 92, 196, .18), 0 14px 30px rgba(1, 92, 196, .10);
+        box-shadow: 0 0 0 2px rgba(1, 92, 196, .22), 0 14px 30px rgba(1, 92, 196, .10);
       }
       50% {
         border-color: var(--lupines-blue);
-        box-shadow: 0 0 0 1px rgba(249, 156, 28, .26), 0 18px 34px rgba(249, 156, 28, .14);
+        box-shadow: 0 0 0 2px rgba(249, 156, 28, .34), 0 18px 34px rgba(249, 156, 28, .14);
       }
     }
 
@@ -745,6 +872,24 @@
     @keyframes solidarityDrift {
       0% { transform: translate3d(0, 0, 0); }
       100% { transform: translate3d(28%, 0, 0); }
+    }
+
+    @keyframes skyFloat {
+      0%, 100% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(.84) rotate(var(--r, 0deg));
+      }
+      18%, 72% {
+        opacity: .18;
+      }
+      45% {
+        opacity: .28;
+        transform: translate3d(var(--dx, 46px), var(--dy, -34px), 0) scale(1.05) rotate(calc(var(--r, 0deg) + 10deg));
+      }
+      78% {
+        opacity: .12;
+        transform: translate3d(0, 0, 0) scale(.96) rotate(calc(var(--r, 0deg) - 8deg));
+      }
     }
 
     .media {
@@ -1886,6 +2031,20 @@
 
   <main>
     <section class="catalog-shell" aria-labelledby="catalogTitle">
+      <div class="solidarity-sky" aria-hidden="true">
+        <span class="sky-icon sun" style="--x:8%;--y:8%;--s:38px;--c:var(--lupines-blue);--dx:70px;--dy:42px;--d:15s;--delay:-2s;"></span>
+        <span class="sky-icon cloud" style="--x:76%;--y:9%;--s:46px;--c:var(--lupines-orange);--dx:-92px;--dy:54px;--d:17s;--delay:-7s;"></span>
+        <span class="sky-icon star" style="--x:41%;--y:15%;--s:30px;--c:var(--lupines-blue);--dx:56px;--dy:-62px;--d:13s;--delay:-4s;"></span>
+        <span class="sky-icon heart" style="--x:91%;--y:19%;--s:34px;--c:var(--lupines-orange);--dx:-74px;--dy:82px;--d:16s;--delay:-9s;"></span>
+        <span class="sky-icon rainbow" style="--x:18%;--y:38%;--s:58px;--c:var(--lupines-blue);--dx:86px;--dy:-48px;--d:19s;--delay:-5s;"></span>
+        <span class="sky-icon bird" style="--x:64%;--y:37%;--s:42px;--c:var(--lupines-orange);--dx:-88px;--dy:58px;--d:14s;--delay:-11s;"></span>
+        <span class="sky-icon cloud" style="--x:5%;--y:58%;--s:54px;--c:var(--lupines-blue);--dx:118px;--dy:-66px;--d:20s;--delay:-10s;"></span>
+        <span class="sky-icon star" style="--x:48%;--y:62%;--s:25px;--c:var(--lupines-orange);--dx:-52px;--dy:-78px;--d:12s;--delay:-1s;"></span>
+        <span class="sky-icon sun" style="--x:82%;--y:66%;--s:34px;--c:var(--lupines-blue);--dx:-84px;--dy:-70px;--d:18s;--delay:-14s;"></span>
+        <span class="sky-icon bird" style="--x:29%;--y:78%;--s:36px;--c:var(--lupines-blue);--dx:96px;--dy:-54px;--d:15s;--delay:-6s;"></span>
+        <span class="sky-icon rainbow" style="--x:69%;--y:84%;--s:52px;--c:var(--lupines-orange);--dx:-102px;--dy:-72px;--d:21s;--delay:-13s;"></span>
+        <span class="sky-icon heart" style="--x:12%;--y:88%;--s:30px;--c:var(--lupines-blue);--dx:76px;--dy:-90px;--d:16s;--delay:-8s;"></span>
+      </div>
       <button class="filter-toggle" id="filterToggle" type="button" aria-label="Abrir filtros"></button>
       <div class="filter-backdrop" id="filterBackdrop"></div>
       <div class="toolbar" aria-label="Filtros del catálogo">
