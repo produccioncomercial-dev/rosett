@@ -813,24 +813,6 @@
       color: var(--lupines-blue);
     }
 
-    body.solidarity-mode .product-card.solidarity-product {
-      border: 4px solid var(--lupines-orange);
-      box-shadow:
-        0 0 0 2px rgba(1, 92, 196, .22),
-        0 14px 30px rgba(1, 92, 196, .10);
-      animation: solidarityBorderPulse 3.4s ease-in-out infinite;
-    }
-
-    body.solidarity-mode .product-card.solidarity-product::before {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      z-index: 1;
-      pointer-events: none;
-      border-radius: calc(var(--radius) - 3px);
-      border: 2px solid rgba(1, 92, 196, .36);
-    }
-
     body.solidarity-mode .product-card.solidarity-product .details-button {
       position: relative;
       overflow: hidden;
@@ -851,17 +833,6 @@
 
     body.solidarity-mode .product-card.solidarity-product .details-button:hover {
       background: #e88914;
-    }
-
-    @keyframes solidarityBorderPulse {
-      0%, 100% {
-        border-color: var(--lupines-orange);
-        box-shadow: 0 0 0 2px rgba(1, 92, 196, .22), 0 14px 30px rgba(1, 92, 196, .10);
-      }
-      50% {
-        border-color: var(--lupines-blue);
-        box-shadow: 0 0 0 2px rgba(249, 156, 28, .34), 0 18px 34px rgba(249, 156, 28, .14);
-      }
     }
 
     @keyframes lupinesButtonShine {
@@ -1014,6 +985,32 @@
       letter-spacing: .01em;
       text-transform: none;
       white-space: nowrap;
+    }
+
+    .solidarity-badge {
+      position: absolute;
+      top: 55px;
+      left: 10px;
+      display: inline-flex;
+      overflow: hidden;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: white;
+      background: var(--lupines-blue);
+      border: 1px solid rgba(255,255,255,.72);
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      box-shadow: 0 8px 18px rgba(1, 92, 196, .24);
+    }
+
+    .solidarity-badge::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.44), transparent 52%);
+      transform: translateX(-115%);
+      animation: lupinesButtonShine 3.6s ease-in-out infinite;
     }
 
     .card-body {
@@ -1214,6 +1211,10 @@
       justify-content: flex-end;
       padding: 12px;
       background: var(--navy);
+    }
+
+    .modal-card.is-solidarity .modal-top {
+      background: var(--lupines-blue);
     }
 
     .close-button {
@@ -2626,6 +2627,7 @@
               <div class="media">
                 <img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                 ${discount ? `<span class="badge">${escapeHtml(discount)}<small>¡Por tiempo limitado!</small></span>` : ''}
+                ${isSolidarityProduct(product) ? '<span class="solidarity-badge">Colección Solidaria</span>' : ''}
               </div>
             </a>
             <div class="card-body">
