@@ -198,8 +198,6 @@
 
     .solidarity-nav {
       color: #fff6e8;
-      border: 1px solid rgba(249, 156, 28, .34);
-      background: rgba(249, 156, 28, .08);
     }
 
     .solidarity-nav .heart {
@@ -647,29 +645,32 @@
 
     body.solidarity-mode .catalog-shell::before,
     body.solidarity-mode .catalog-shell::after {
-      content: "☼  ⋆  ☁  ⌁  ♡  ⋆  ☁";
+      content: "☼  ⋆  ☁  ⌁  ♡  ☆  arcoiris  ☼  ⋆  ☁  ⌁  ♡  ☆  sol  ☁  ⋆  ♡";
       position: absolute;
       pointer-events: none;
       z-index: 0;
       color: var(--lupines-blue);
-      font-size: 2.2rem;
-      letter-spacing: 2.4rem;
-      opacity: .08;
+      width: 190%;
+      font-size: 2.75rem;
+      letter-spacing: 1.85rem;
+      line-height: 2.7;
+      opacity: .18;
       white-space: nowrap;
-      animation: solidarityDrift 18s ease-in-out infinite;
+      animation: solidarityDrift 24s linear infinite;
     }
 
     body.solidarity-mode .catalog-shell::before {
-      top: 28px;
-      left: 4%;
+      top: 30px;
+      left: -42%;
     }
 
     body.solidarity-mode .catalog-shell::after {
-      right: 0;
-      bottom: 90px;
+      content: "☁  ⋆  ♡  arcoiris  ☆  ☼  ⌁  ☁  ⋆  ♡  niños  ☆  ☼  ⌁  ☁  ⋆";
+      right: -42%;
+      bottom: 80px;
       color: var(--lupines-orange);
       animation-delay: -8s;
-      animation-duration: 22s;
+      animation-duration: 28s;
     }
 
     body.solidarity-mode .catalog-head,
@@ -686,30 +687,64 @@
     }
 
     body.solidarity-mode .product-card.solidarity-product {
-      border-color: rgba(1, 92, 196, .18);
-      box-shadow: 0 14px 30px rgba(1, 92, 196, .08);
+      border: 2px solid var(--lupines-orange);
+      box-shadow:
+        0 0 0 1px rgba(1, 92, 196, .18),
+        0 14px 30px rgba(1, 92, 196, .10);
+      animation: solidarityBorderPulse 3.4s ease-in-out infinite;
     }
 
-    body.solidarity-mode .product-card.solidarity-product::after {
+    body.solidarity-mode .product-card.solidarity-product::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: calc(var(--radius) - 3px);
+      border: 1px solid rgba(1, 92, 196, .32);
+    }
+
+    body.solidarity-mode .product-card.solidarity-product .details-button {
+      position: relative;
+      overflow: hidden;
+      border-color: var(--lupines-orange);
+      background: var(--lupines-orange);
+      color: white;
+      box-shadow: 0 10px 22px rgba(249, 156, 28, .22);
+    }
+
+    body.solidarity-mode .product-card.solidarity-product .details-button::after {
       content: "";
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      border-radius: var(--radius);
-      background: linear-gradient(120deg, transparent 8%, rgba(249, 156, 28, .12), transparent 34%, rgba(1, 92, 196, .08), transparent 62%);
+      background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.42), transparent 52%);
       transform: translateX(-115%);
-      animation: lupinesCardGlow 6s ease-in-out infinite;
+      animation: lupinesButtonShine 3.6s ease-in-out infinite;
     }
 
-    @keyframes lupinesCardGlow {
-      0%, 45% { transform: translateX(-115%); opacity: 0; }
-      58% { opacity: 1; }
-      82%, 100% { transform: translateX(115%); opacity: 0; }
+    body.solidarity-mode .product-card.solidarity-product .details-button:hover {
+      background: #e88914;
+    }
+
+    @keyframes solidarityBorderPulse {
+      0%, 100% {
+        border-color: var(--lupines-orange);
+        box-shadow: 0 0 0 1px rgba(1, 92, 196, .18), 0 14px 30px rgba(1, 92, 196, .10);
+      }
+      50% {
+        border-color: var(--lupines-blue);
+        box-shadow: 0 0 0 1px rgba(249, 156, 28, .26), 0 18px 34px rgba(249, 156, 28, .14);
+      }
+    }
+
+    @keyframes lupinesButtonShine {
+      0%, 48% { transform: translateX(-115%); }
+      76%, 100% { transform: translateX(115%); }
     }
 
     @keyframes solidarityDrift {
-      0%, 100% { transform: translate3d(0, 0, 0); opacity: .07; }
-      50% { transform: translate3d(18px, 10px, 0); opacity: .14; }
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(28%, 0, 0); }
     }
 
     .media {
@@ -1565,7 +1600,6 @@
 
       .mobile-nav-drawer .solidarity-nav {
         color: var(--lupines-blue);
-        background: rgba(249, 156, 28, .12);
       }
 
       .hero-inner {
