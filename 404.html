@@ -1159,6 +1159,121 @@
       display: block;
     }
 
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(10px);
+      transition: opacity .22s ease, visibility .22s ease;
+    }
+
+    .page-loader.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loader-card {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      padding: 28px;
+      color: var(--navy);
+    }
+
+    .loader-logo {
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+      animation: loaderSpin 1.15s cubic-bezier(.75, .05, .25, 1) infinite, loaderBreath 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 16px 28px rgba(7, 27, 58, .18));
+    }
+
+    .loader-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: .85rem;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .loader-dots {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 2px;
+      margin-left: 2px;
+    }
+
+    .loader-dots span {
+      animation: loaderDot 1s ease-in-out infinite;
+    }
+
+    .loader-dots span:nth-child(2) {
+      animation-delay: .14s;
+    }
+
+    .loader-dots span:nth-child(3) {
+      animation-delay: .28s;
+    }
+
+    .page-loader.is-solidarity {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(1, 92, 196, .08), transparent 26%),
+        radial-gradient(circle at 86% 82%, rgba(249, 156, 28, .10), transparent 28%),
+        rgba(255,255,255,.95);
+    }
+
+    .page-loader.is-solidarity .loader-message {
+      color: var(--lupines-blue);
+    }
+
+    .page-loader.is-solidarity .loader-logo {
+      filter: drop-shadow(0 16px 28px rgba(1, 92, 196, .18));
+    }
+
+    .loader-icons {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .page-loader.is-solidarity .loader-icons {
+      display: block;
+    }
+
+    .loader-icons .sky-icon {
+      opacity: 0;
+      animation-duration: var(--d, 4.2s);
+    }
+
+    @keyframes loaderSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      34% { transform: rotate(150deg) scale(1.05); }
+      64% { transform: rotate(245deg) scale(.97); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes loaderBreath {
+      0%, 100% { opacity: .72; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes loaderDot {
+      0%, 100% { opacity: .18; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-2px); }
+    }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -1982,6 +2097,23 @@
   </style>
 </head>
 <body>
+  <div class="page-loader" id="pageLoader" aria-live="polite" aria-hidden="true">
+    <div class="loader-icons" aria-hidden="true">
+      <span class="sky-icon sun" style="--x:12%;--y:18%;--s:38px;--c:var(--lupines-blue);--dx:58px;--dy:48px;--d:4.6s;--delay:-.6s;"></span>
+      <span class="sky-icon cloud" style="--x:72%;--y:16%;--s:48px;--c:var(--lupines-orange);--dx:-78px;--dy:54px;--d:5.2s;--delay:-1.4s;"></span>
+      <span class="sky-icon star" style="--x:84%;--y:62%;--s:30px;--c:var(--lupines-blue);--dx:-62px;--dy:-62px;--d:4.4s;--delay:-2s;"></span>
+      <span class="sky-icon heart" style="--x:20%;--y:72%;--s:34px;--c:var(--lupines-orange);--dx:70px;--dy:-56px;--d:5s;--delay:-1s;"></span>
+      <span class="sky-icon rainbow" style="--x:50%;--y:78%;--s:56px;--c:var(--lupines-blue);--dx:84px;--dy:-72px;--d:5.4s;--delay:-2.6s;"></span>
+      <span class="sky-icon bird" style="--x:42%;--y:24%;--s:42px;--c:var(--lupines-orange);--dx:-76px;--dy:46px;--d:4.8s;--delay:-1.8s;"></span>
+    </div>
+    <div class="loader-card">
+      <img class="loader-logo" src="faviconrosett.png" alt="">
+      <div class="loader-message">
+        <span id="loaderText">Preparando joyas</span>
+        <span class="loader-dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span>
+      </div>
+    </div>
+  </div>
   <div class="thanks-overlay" id="thanksOverlay" aria-live="polite" aria-hidden="true">
     <div class="thanks-card">
       <span class="heart" aria-hidden="true"></span>
@@ -2244,7 +2376,9 @@
       modalDetails: $('#modalDetails'),
       modalLocation: $('#modalLocation'),
       modalWhatsapp: $('#modalWhatsapp'),
-      thanksOverlay: $('#thanksOverlay')
+      thanksOverlay: $('#thanksOverlay'),
+      pageLoader: $('#pageLoader'),
+      loaderText: $('#loaderText')
     };
 
     function normalizeText(value) {
@@ -2409,6 +2543,27 @@
     function navigateTo(url) {
       window.history.pushState({}, '', url);
       renderRoute();
+    }
+
+    function showPageLoader(options = {}) {
+      const solidarity = Boolean(options.solidarity);
+      const message = options.message || (solidarity ? 'Cargando joyas con propósito' : 'Preparando joyas');
+      const duration = options.duration || (solidarity ? 1300 : 800);
+      els.loaderText.textContent = message;
+      els.pageLoader.classList.toggle('is-solidarity', solidarity);
+      els.pageLoader.classList.add('is-visible');
+      els.pageLoader.setAttribute('aria-hidden', 'false');
+
+      return new Promise((resolve) => {
+        window.setTimeout(() => {
+          els.pageLoader.classList.remove('is-visible');
+          els.pageLoader.setAttribute('aria-hidden', 'true');
+          window.setTimeout(() => {
+            els.pageLoader.classList.remove('is-solidarity');
+          }, 240);
+          resolve();
+        }, duration);
+      });
     }
 
     function setBanner(index) {
@@ -3084,8 +3239,11 @@
       }
     }
 
+    let searchLoaderTimer = null;
+
     [els.search, els.family, els.subfamily, els.design, els.city].forEach((control) => {
       control.addEventListener('input', () => {
+        window.clearTimeout(searchLoaderTimer);
         if (control === els.search && els.search.value.trim()) {
           state.category = { family: '', subfamily: '', design: '' };
           setSolidarityMode(false);
@@ -3095,7 +3253,10 @@
           if (els.city) els.city.value = '';
         }
         if (control === els.family || control === els.subfamily) refreshFilters();
-        applyFilters();
+        searchLoaderTimer = window.setTimeout(async () => {
+          await showPageLoader();
+          applyFilters();
+        }, control === els.search ? 260 : 0);
       });
     });
 
@@ -3103,27 +3264,30 @@
       document.body.classList.remove('mobile-nav-open');
     }
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
       const categoryLink = event.target.closest('[data-category-path]');
       if (!categoryLink) return;
       event.preventDefault();
       const [family = '', subfamily = '', design = ''] = categoryLink.dataset.categoryPath.split('|');
+      await showPageLoader();
       setCategory({ family, subfamily, design });
       closeMobileNav();
     });
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
       const solidarityLink = event.target.closest('[data-solidarity-link]');
       if (!solidarityLink) return;
       event.preventDefault();
+      await showPageLoader({ solidarity: true, message: 'Cargando joyas con propósito', duration: 1300 });
       setSolidarityCollection(true, 1);
       closeMobileNav();
     });
 
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
       const homeLink = event.target.closest('[data-home-link], .brand-home');
       if (!homeLink) return;
       event.preventDefault();
+      await showPageLoader();
       resetAllFilters();
       closeMobileNav();
       window.history.pushState({}, '', pageUrl(1));
@@ -3145,7 +3309,7 @@
       navigateTo(link.getAttribute('href'));
     });
 
-    els.pagination.addEventListener('click', (event) => {
+    els.pagination.addEventListener('click', async (event) => {
       const link = event.target.closest('a');
       if (!link || link.classList.contains('is-disabled')) return;
       event.preventDefault();
@@ -3159,6 +3323,7 @@
         state.page = Math.min(totalPages, state.page + 1);
       }
 
+      await showPageLoader(state.solidarity ? { solidarity: true, message: 'Cargando joyas con propósito', duration: 1300 } : {});
       window.history.pushState({}, '', listingUrl(state.page));
       renderProducts();
       document.querySelector('.catalog-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
