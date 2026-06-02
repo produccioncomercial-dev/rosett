@@ -1189,6 +1189,217 @@
       display: block;
     }
 
+    .stores-shell {
+      width: min(1500px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+    }
+
+    .stores-hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 26px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(191, 197, 206, .55);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 94% 15%, rgba(191, 197, 206, .26), transparent 25%),
+        linear-gradient(135deg, #ffffff, #f8fafc);
+      box-shadow: 0 20px 60px rgba(7, 27, 58, .08);
+    }
+
+    .stores-hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -100px;
+      top: -80px;
+      border-radius: 50%;
+      border: 28px solid rgba(7, 27, 58, .05);
+      animation: storeHalo 7s ease-in-out infinite;
+    }
+
+    .stores-hero h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2rem, 4vw, 46px);
+      line-height: 1;
+    }
+
+    .stores-hero p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .store-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 22px;
+    }
+
+    .store-filter {
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid var(--silver);
+      border-radius: 999px;
+      color: var(--navy);
+      background: white;
+      font-weight: 800;
+      transition: transform .18s ease, color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .store-filter:hover,
+    .store-filter.is-active {
+      transform: translateY(-1px);
+      color: white;
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .stores-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .store-card {
+      position: relative;
+      display: grid;
+      gap: 14px;
+      overflow: hidden;
+      min-height: 260px;
+      padding: 20px;
+      border: 1px solid var(--silver-2);
+      border-radius: var(--radius);
+      background: white;
+      box-shadow: 0 16px 44px rgba(7, 27, 58, .07);
+      animation: storeCardIn .52s ease both;
+      animation-delay: calc(var(--i, 0) * 45ms);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .store-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, transparent 15%, rgba(191,197,206,.24), transparent 52%);
+      transform: translateX(-120%);
+      transition: transform .7s ease;
+    }
+
+    .store-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--silver);
+      box-shadow: 0 24px 70px rgba(7, 27, 58, .12);
+    }
+
+    .store-card:hover::before {
+      transform: translateX(120%);
+    }
+
+    .store-head {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .store-number {
+      min-width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--navy);
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+    }
+
+    .store-card h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+      line-height: 1.22;
+    }
+
+    .store-city {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--navy);
+      background: var(--soft);
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .store-address {
+      margin: 0;
+      color: #334155;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .store-reference {
+      margin: -4px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.35;
+    }
+
+    .store-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .store-action {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: var(--radius);
+      color: white;
+      text-decoration: none;
+      font-weight: 850;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .store-action.call {
+      background: var(--navy);
+    }
+
+    .store-action.whatsapp {
+      background: var(--success);
+    }
+
+    .store-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(7, 27, 58, .16);
+    }
+
+    @keyframes storeCardIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes storeHalo {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .8; }
+      50% { transform: translate3d(-18px, 14px, 0) scale(1.06); opacity: 1; }
+    }
+
     .page-loader {
       position: fixed;
       inset: 0;
@@ -1750,6 +1961,10 @@
       .product-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
+
+      .stores-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 1040px) {
@@ -1760,11 +1975,16 @@
       .product-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+
+      .stores-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 760px) {
       .header-inner,
       .catalog-shell,
+      .stores-shell,
       .footer-inner {
         width: min(100% - 24px, 1180px);
       }
@@ -1900,6 +2120,18 @@
 
       .mobile-nav-drawer .solidarity-nav {
         color: var(--lupines-blue);
+      }
+
+      .stores-shell {
+        padding-top: 24px;
+      }
+
+      .stores-hero {
+        padding: 20px;
+      }
+
+      .stores-grid {
+        grid-template-columns: 1fr;
       }
 
       .hero-inner {
@@ -2182,7 +2414,7 @@
       <nav class="main-nav" aria-label="Navegación principal">
         <a class="nav-link" href="/" data-home-link>Inicio</a>
         <div id="categoryMenu"></div>
-        <a class="nav-link" href="#" aria-disabled="true">Tiendas</a>
+        <a class="nav-link" href="/tiendas" data-stores-link>Tiendas</a>
         <a class="nav-link solidarity-nav" href="/coleccion-solidaria" data-solidarity-link><span class="heart" aria-hidden="true"></span>Colección solidaria</a>
       </nav>
       <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-label="Abrir menú"></button>
@@ -2195,7 +2427,7 @@
       <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Cerrar menú">×</button>
     </div>
     <div id="mobileCategoryMenu"></div>
-    <a class="nav-link" href="#" aria-disabled="true">Tiendas</a>
+    <a class="nav-link" href="/tiendas" data-stores-link>Tiendas</a>
     <a class="nav-link solidarity-nav" href="/coleccion-solidaria" data-solidarity-link><span class="heart" aria-hidden="true"></span>Colección solidaria</a>
   </aside>
 
@@ -2289,6 +2521,14 @@
       <div id="productGrid" class="product-grid" aria-live="polite"></div>
       <div id="pagination" class="pagination" aria-label="Paginación del catálogo"></div>
     </section>
+    <section class="stores-shell" id="storesPage" aria-labelledby="storesTitle" hidden>
+      <div class="stores-hero">
+        <h2 id="storesTitle">Nuestras tiendas</h2>
+        <p>Encuentra la sucursal Rossett e Inticash más cercana. Te atendemos por llamada o WhatsApp para ayudarte a elegir tu joya de plata.</p>
+      </div>
+      <div class="store-filters" id="storeFilters" aria-label="Filtrar tiendas por ciudad"></div>
+      <div class="stores-grid" id="storesGrid"></div>
+    </section>
   </main>
 
   <section id="productModal" class="modal" aria-labelledby="modalTitle">
@@ -2348,6 +2588,18 @@
     const CSV_FILE = 'productosrosett.csv';
     const PRODUCTS_PER_PAGE = 30;
     const SOLIDARITY_ROUTE = 'coleccion-solidaria';
+    const STORES_ROUTE = 'tiendas';
+    const STORES = [
+      { record: '01 - Tacna, centro', address: 'Av. San Martín 750, Tacna', city: 'Tacna', phone: '963165116', reference: 'Media cuadra más arriba de Pasaje Vigil' },
+      { record: '02 - Ilo, centro', address: 'Calle Jirón Moquegua 423, Ilo', city: 'Ilo', phone: '991656113', reference: 'A media cuadra de la Plaza de Armas' },
+      { record: '03 - Tacna, cono sur', address: 'Asoc. Villa San Francisco Mz 97 Lt07', city: 'Tacna', phone: '997085856', reference: 'Diagonal al Mercado Santa Rosa' },
+      { record: '06 - Arequipa, centro', address: 'Calle la Merced 125, Arequipa', city: 'Arequipa', phone: '943505474', reference: 'Frente al museo Casa de la Cultura' },
+      { record: '07 - Juliaca, centro', address: 'Jirón San Martín 305, Juliaca', city: 'Juliaca', phone: '940223410', reference: 'Diagonal a Plaza Vea' },
+      { record: '08 - Lima, Zárate SJL', address: 'Av. Gran Chimu 840, SJL Zárate, Lima', city: 'Lima', phone: '991987148', reference: 'Cerca al banco BCP' },
+      { record: '09 - Lima, San Luis, SB', address: 'Av. San Luis 2016, San Borja, Lima', city: 'Lima', phone: '963097491', reference: 'Cerca al restaurante Williams Flores' },
+      { record: '10 - Arequipa, Cayma', address: 'Av. Trinidad Morán 270, Cayma, Arequipa', city: 'Arequipa', phone: '987375096', reference: 'Cerca a Cafetería Mocca' },
+      { record: '11 - Lima, San Juan de Miraflores', address: 'Av. San Juan 1074 A, San Juan de Miraflores, Lima', city: 'Lima', phone: '941542536', reference: 'Diagonal al restaurante La Cabañita' }
+    ];
     const PLACEHOLDER_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
         <defs>
@@ -2373,7 +2625,8 @@
       bannerIndex: 0,
       bannerTimer: null,
       returnUrl: '',
-      activeProduct: null
+      activeProduct: null,
+      storeCity: 'Todas'
     };
 
     const $ = (selector) => document.querySelector(selector);
@@ -2402,6 +2655,9 @@
       bannerCarousel: $('#bannerCarousel'),
       bannerTrack: $('#bannerTrack'),
       catalog: $('.catalog-shell'),
+      storesPage: $('#storesPage'),
+      storeFilters: $('#storeFilters'),
+      storesGrid: $('#storesGrid'),
       modal: $('#productModal'),
       closeModal: $('#closeModal'),
       modalCloseBottom: $('#modalCloseBottom'),
@@ -2558,6 +2814,11 @@
     function solidarityUrl(page = 1) {
       const base = appBasePath();
       return page <= 1 ? `${base}${SOLIDARITY_ROUTE}` : `${base}${SOLIDARITY_ROUTE}/${page}`;
+    }
+
+    function storesUrl(city = '') {
+      const base = appBasePath();
+      return city && city !== 'Todas' ? `${base}${STORES_ROUTE}/${encodeURIComponent(city)}` : `${base}${STORES_ROUTE}`;
     }
 
     function listingUrl(page = state.page) {
@@ -2876,6 +3137,60 @@
       `;
     }
 
+    function storeName(record) {
+      return String(record || '').replace(/^\d+\s*-\s*/, '').trim();
+    }
+
+    function renderStores(city = state.storeCity, updateUrl = false) {
+      state.storeCity = city || 'Todas';
+      const cities = ['Todas', ...new Set(STORES.map((store) => store.city))].sort((a, b) => a === 'Todas' ? -1 : b === 'Todas' ? 1 : a.localeCompare(b, 'es'));
+      const visibleStores = state.storeCity === 'Todas'
+        ? STORES
+        : STORES.filter((store) => normalizeText(store.city) === normalizeText(state.storeCity));
+
+      els.storeFilters.innerHTML = cities.map((cityName) => `
+        <button class="store-filter ${cityName === state.storeCity ? 'is-active' : ''}" type="button" data-store-city="${escapeHtml(cityName)}">${escapeHtml(cityName)}</button>
+      `).join('');
+
+      els.storesGrid.innerHTML = visibleStores.map((store, index) => {
+        const phone = String(store.phone).replace(/\D/g, '');
+        const cleanName = storeName(store.record);
+        const whatsappMessage = encodeURIComponent(`Hola, quiero información de la tienda Rossett ${cleanName}.`);
+        return `
+          <article class="store-card" style="--i:${index}">
+            <div class="store-head">
+              <div class="store-number">${escapeHtml(String(store.record).split('-')[0].trim())}</div>
+              <div>
+                <h3>${escapeHtml(cleanName)}</h3>
+                <span class="store-city">${escapeHtml(store.city)}</span>
+              </div>
+            </div>
+            <p class="store-address">${escapeHtml(store.address)}</p>
+            <p class="store-reference">Referencia: ${escapeHtml(store.reference)}</p>
+            <div class="store-actions">
+              <a class="store-action call" href="tel:+51${escapeHtml(phone)}">Llamar</a>
+              <a class="store-action whatsapp" href="https://wa.me/51${escapeHtml(phone)}?text=${whatsappMessage}" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      if (updateUrl) window.history.pushState({}, '', storesUrl(state.storeCity));
+    }
+
+    function showStores(city = 'Todas', updateUrl = false) {
+      setSolidarityMode(false);
+      state.category = { family: '', subfamily: '', design: '' };
+      state.page = 1;
+      els.search.value = '';
+      els.catalog.style.display = 'none';
+      els.storesPage.hidden = false;
+      els.modal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      setHeroVisible(false);
+      renderStores(city, updateUrl);
+    }
+
     function priceMarkup(product) {
       const regular = money(product.regularPrice);
       const sale = money(product.salePrice);
@@ -3004,6 +3319,7 @@
 
     function showCatalog() {
       els.catalog.style.display = '';
+      els.storesPage.hidden = true;
       els.modal.classList.remove('is-open');
       document.body.classList.remove('modal-open');
       document.querySelector('.modal-card').classList.remove('is-solidarity');
@@ -3128,6 +3444,14 @@
       }
 
       const routeParts = route.split('/').map((part) => part.trim()).filter(Boolean);
+      if (normalizeText(routeParts[0]) === STORES_ROUTE) {
+        const city = routeParts[1]
+          ? STORES.find((store) => normalizeText(store.city) === normalizeText(routeParts[1]))?.city || 'Todas'
+          : 'Todas';
+        showStores(city, false);
+        return;
+      }
+
       if (normalizeText(routeParts[0]) === SOLIDARITY_ROUTE) {
         const page = Number(routeParts[1] || 1);
         setSolidarityCollection(false, Number.isInteger(page) && page > 0 ? page : 1);
@@ -3324,6 +3648,15 @@
     });
 
     document.addEventListener('click', async (event) => {
+      const storesLink = event.target.closest('[data-stores-link]');
+      if (!storesLink) return;
+      event.preventDefault();
+      await showPageLoader();
+      showStores('Todas', true);
+      closeMobileNav();
+    });
+
+    document.addEventListener('click', async (event) => {
       const homeLink = event.target.closest('[data-home-link], .brand-home');
       if (!homeLink) return;
       event.preventDefault();
@@ -3367,6 +3700,13 @@
       window.history.pushState({}, '', listingUrl(state.page));
       renderProducts();
       document.querySelector('.catalog-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    els.storeFilters.addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-store-city]');
+      if (!button) return;
+      await showPageLoader();
+      renderStores(button.dataset.storeCity, true);
     });
 
     function closeFilters() {
