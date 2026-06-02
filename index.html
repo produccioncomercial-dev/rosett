@@ -2523,8 +2523,8 @@
     </section>
     <section class="stores-shell" id="storesPage" aria-labelledby="storesTitle" hidden>
       <div class="stores-hero">
-        <h2 id="storesTitle">Nuestras tiendas</h2>
-        <p>Encuentra la sucursal Rossett e Inticash más cercana. Te atendemos por llamada o WhatsApp para ayudarte a elegir tu joya de plata.</p>
+        <h2 id="storesTitle">Nuestras sucursales Inticash</h2>
+        <p>Encuentra la sucursal Inticash más cercana. Te atendemos por llamada o WhatsApp para ayudarte con tus consultas y compras.</p>
       </div>
       <div class="store-filters" id="storeFilters" aria-label="Filtrar tiendas por ciudad"></div>
       <div class="stores-grid" id="storesGrid"></div>
@@ -3155,7 +3155,7 @@
       els.storesGrid.innerHTML = visibleStores.map((store, index) => {
         const phone = String(store.phone).replace(/\D/g, '');
         const cleanName = storeName(store.record);
-        const whatsappMessage = encodeURIComponent(`Hola, quiero información de la tienda Rossett ${cleanName}.`);
+        const whatsappMessage = encodeURIComponent(`Hola, quiero información de la sucursal Inticash ${cleanName}.`);
         return `
           <article class="store-card" style="--i:${index}">
             <div class="store-head">
