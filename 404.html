@@ -92,16 +92,46 @@
     }
 
     .brand-home {
+      position: relative;
+      width: 168px;
+      height: 54px;
       display: inline-flex;
       align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
     }
 
     .brand-logo {
-      display: block;
+      position: absolute;
+      inset: 0 auto 0 0;
       width: auto;
       max-width: 168px;
       height: 52px;
       object-fit: contain;
+      transform-origin: left center;
+    }
+
+    .brand-logo.rossett-logo {
+      animation: rosettLogoCycle 36s ease-in-out infinite;
+    }
+
+    .brand-logo.inticash-logo {
+      max-width: 166px;
+      opacity: 0;
+      transform: translateY(8px) scale(.96);
+      animation: inticashLogoCycle 36s ease-in-out infinite;
+    }
+
+    @keyframes rosettLogoCycle {
+      0%, 81.5% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      83%, 94.6% { opacity: 0; transform: translateY(-8px) scale(.96); filter: blur(1px); }
+      96.5%, 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes inticashLogoCycle {
+      0%, 81.5% { opacity: 0; transform: translateY(8px) scale(.96); filter: blur(1px); }
+      83%, 94.6% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      96.5%, 100% { opacity: 0; transform: translateY(8px) scale(.96); filter: blur(1px); }
     }
 
     .site-search {
@@ -1753,6 +1783,15 @@
         max-width: 92px;
       }
 
+      .brand-home {
+        width: 92px;
+        height: 44px;
+      }
+
+      .brand-logo.inticash-logo {
+        max-width: 92px;
+      }
+
       .site-search {
         flex: 1 1 auto;
         min-width: 0;
@@ -2133,7 +2172,8 @@
     <div class="header-inner">
       <div class="brand" aria-label="Rossett Joyería de Plata">
         <a class="brand-home" href="/" id="brandHome" aria-label="Ir a Inicio">
-          <img class="brand-logo" src="logorosett.png" alt="Rossett Joyería de plata">
+          <img class="brand-logo rossett-logo" src="logorosett.png" alt="Rossett Joyería de plata">
+          <img class="brand-logo inticash-logo" src="logointicashwhite-cropped.png" alt="Una marca de Inticash">
         </a>
       </div>
       <div class="site-search">
