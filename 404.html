@@ -20,6 +20,9 @@
   </script>
   <link rel="icon" type="image/png" href="faviconrosett.png">
   <link rel="apple-touch-icon" href="faviconrosett.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
   <meta name="description" content="Catálogo moderno de joyería de plata Rossett con compra por WhatsApp.">
   <style>
     :root {
@@ -1142,6 +1145,45 @@
     .zoomable:hover .zoom-hint {
       opacity: 0;
       transform: scale(.86);
+    }
+
+    .packaging-copy {
+      position: absolute;
+      left: 50%;
+      bottom: 7.5%;
+      z-index: 6;
+      display: none;
+      max-width: 86%;
+      overflow: hidden;
+      transform: translateX(-50%);
+      color: white;
+      font-family: Raleway, Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(1rem, 2vw, 1.45rem);
+      font-style: italic;
+      font-weight: 600;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      text-shadow: 0 3px 14px rgba(0, 0, 0, .62);
+      width: 0;
+      border-right: 2px solid rgba(255, 255, 255, .9);
+    }
+
+    .gallery-main.is-packaging .packaging-copy {
+      display: inline-block;
+      animation:
+        packagingTyping 2s steps(58, end) forwards,
+        packagingCaret .65s step-end 3 forwards;
+    }
+
+    @keyframes packagingTyping {
+      from { width: 0; }
+      to { width: min(86%, 720px); }
+    }
+
+    @keyframes packagingCaret {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: rgba(255, 255, 255, .9); }
     }
 
     .zoom-instruction {
@@ -2373,6 +2415,17 @@
         display: inline;
       }
 
+      .packaging-copy {
+        bottom: 7%;
+        max-width: 90%;
+        font-size: clamp(.8rem, 3vw, 1rem);
+      }
+
+      @keyframes packagingTyping {
+        from { width: 0; }
+        to { width: min(90%, 520px); }
+      }
+
       .hero-inner {
         padding: 38px 0 24px;
       }
@@ -2795,6 +2848,7 @@
             <img id="modalImage" alt="">
             <span class="magnifier-lens" aria-hidden="true"></span>
             <span class="zoom-hint" aria-hidden="true"></span>
+            <span class="packaging-copy">Empacada con cariño, para alguien especial como tú</span>
           </div>
           <p class="zoom-instruction">
             <span class="desktop-copy">Acerca el puntero sobre la foto para ver cada detalle con lupa.</span>
@@ -2846,6 +2900,7 @@
     const PRODUCTS_PER_PAGE = 30;
     const SOLIDARITY_ROUTE = 'coleccion-solidaria';
     const STORES_ROUTE = 'tiendas';
+    const PACKAGING_IMAGE = 'bolsarosett.webp';
     const ROTATED_PHOTO_SKUS = new Set([
       '2N2052102.10',
       '2N2052110.36',
@@ -3035,10 +3090,14 @@
     }
 
     function splitImages(value) {
-      return String(value || '')
+      const images = String(value || '')
         .split(',')
         .map((url) => url.trim())
         .filter(Boolean);
+      if (!images.some((url) => url === PACKAGING_IMAGE || url.endsWith('/' + PACKAGING_IMAGE))) {
+        images.push(PACKAGING_IMAGE);
+      }
+      return images;
     }
 
     function cleanBranchName(value) {
@@ -3580,14 +3639,17 @@
 
     function renderGallery(product, activeIndex) {
       const image = product.images[activeIndex] || product.images[0] || PLACEHOLDER_IMAGE;
-      const rotate = shouldRotatePhoto(product);
-      els.modalImage.closest('.gallery-main').classList.toggle('rotate-photo', rotate);
+      const isPackaging = image === PACKAGING_IMAGE || image.endsWith('/' + PACKAGING_IMAGE);
+      const rotate = shouldRotatePhoto(product) && !isPackaging;
+      const gallery = els.modalImage.closest('.gallery-main');
+      gallery.classList.toggle('rotate-photo', rotate);
+      gallery.classList.toggle('is-packaging', isPackaging);
       els.modalImage.src = image;
       els.modalImage.alt = product.name;
       els.modalImage.onerror = () => { els.modalImage.src = PLACEHOLDER_IMAGE; };
 
       els.modalThumbs.innerHTML = product.images.map((url, index) => `
-        <button class="thumb ${index === activeIndex ? 'is-active' : ''}${rotate ? ' rotate-photo' : ''}" type="button" data-image-index="${index}" aria-label="Ver foto ${index + 1}">
+        <button class="thumb ${index === activeIndex ? 'is-active' : ''}${shouldRotatePhoto(product) && !(url === PACKAGING_IMAGE || url.endsWith('/' + PACKAGING_IMAGE)) ? ' rotate-photo' : ''}" type="button" data-image-index="${index}" aria-label="Ver foto ${index + 1}">
           <img src="${escapeHtml(url)}" alt="" onerror="this.src='${PLACEHOLDER_IMAGE}'">
         </button>
       `).join('');
