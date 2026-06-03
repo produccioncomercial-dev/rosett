@@ -139,6 +139,9 @@
       max-width: 520px;
       position: relative;
       min-width: 240px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .site-search::before {
@@ -175,6 +178,26 @@
       color: white;
       background: rgba(255,255,255,.08);
       outline: none;
+    }
+
+    .search-submit {
+      height: 42px;
+      flex: 0 0 auto;
+      border: 1px solid rgba(191, 197, 206, .42);
+      border-radius: 999px;
+      padding: 0 15px;
+      color: white;
+      background: rgba(255,255,255,.1);
+      font-size: .76rem;
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .search-submit:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.18);
     }
 
     .site-search input::placeholder {
@@ -916,6 +939,17 @@
 
     .product-card:hover .media img {
       transform: scale(1.04);
+    }
+
+    .media.rotate-photo img,
+    .gallery-main.rotate-photo img,
+    .thumb.rotate-photo img {
+      object-fit: contain;
+      transform: rotate(90deg) scale(.92);
+    }
+
+    .product-card:hover .media.rotate-photo img {
+      transform: rotate(90deg) scale(.96);
     }
 
     .zoomable {
@@ -2023,6 +2057,37 @@
         font-size: .86rem;
       }
 
+      .search-submit {
+        width: 40px;
+        padding: 0;
+        font-size: 0;
+        position: relative;
+      }
+
+      .search-submit::before {
+        content: "";
+        position: absolute;
+        left: 12px;
+        top: 11px;
+        width: 12px;
+        height: 12px;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+      }
+
+      .search-submit::after {
+        content: "";
+        position: absolute;
+        left: 25px;
+        top: 26px;
+        width: 8px;
+        height: 2px;
+        border-radius: 999px;
+        background: currentColor;
+        transform: rotate(45deg);
+        transform-origin: left center;
+      }
+
       .main-nav {
         display: none;
       }
@@ -2408,9 +2473,10 @@
           <img class="brand-logo inticash-logo" src="logointicashwhite-cropped.png" alt="Una marca de Inticash">
         </a>
       </div>
-      <div class="site-search">
+      <form class="site-search" id="siteSearch" role="search">
         <input id="searchInput" type="search" placeholder="Buscar por nombre, SKU o diseño" autocomplete="off">
-      </div>
+        <button class="search-submit" type="submit">Buscar</button>
+      </form>
       <nav class="main-nav" aria-label="Navegación principal">
         <a class="nav-link" href="/" data-home-link>Inicio</a>
         <div id="categoryMenu"></div>
@@ -2589,6 +2655,12 @@
     const PRODUCTS_PER_PAGE = 30;
     const SOLIDARITY_ROUTE = 'coleccion-solidaria';
     const STORES_ROUTE = 'tiendas';
+    const ROTATED_PHOTO_SKUS = new Set([
+      '2N2052102.10',
+      '2N2052110.36',
+      '2N2052102.7',
+      '2N2052105.5'
+    ]);
     const STORES = [
       { record: '01 - Tacna, centro', address: 'Av. San Martín 750, Tacna', city: 'Tacna', phone: '963165116', reference: 'Media cuadra más arriba de Pasaje Vigil' },
       { record: '02 - Ilo, centro', address: 'Calle Jirón Moquegua 423, Ilo', city: 'Ilo', phone: '991656113', reference: 'A media cuadra de la Plaza de Armas' },
@@ -2636,6 +2708,7 @@
       status: $('#status'),
       fallback: $('#csvFallback'),
       csvInput: $('#csvInput'),
+      siteSearch: $('#siteSearch'),
       search: $('#searchInput'),
       categoryMenu: $('#categoryMenu'),
       mobileCategoryMenu: $('#mobileCategoryMenu'),
@@ -2939,6 +3012,11 @@
       return /\(L\)/i.test(product.name || '');
     }
 
+    function shouldRotatePhoto(productOrSku) {
+      const sku = typeof productOrSku === 'string' ? productOrSku : productOrSku?.sku;
+      return ROTATED_PHOTO_SKUS.has(String(sku || '').trim());
+    }
+
     function optionList(values, placeholder) {
       const unique = [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
       return `<option value="">${placeholder}</option>` + unique.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
@@ -3101,10 +3179,11 @@
         const discount = discountLabel(product);
         const meta = [product.family, product.design || product.subfamily, product.city].filter(Boolean).join(' · ');
         const url = productUrl(product.sku);
+        const rotateClass = shouldRotatePhoto(product) ? ' rotate-photo' : '';
         return `
           <article class="product-card ${isSolidarityProduct(product) ? 'solidarity-product' : ''}">
             <a class="media-link" href="${escapeHtml(url)}" data-product-link="${escapeHtml(product.sku)}" aria-label="Ver ${escapeHtml(product.name)}">
-              <div class="media">
+              <div class="media${rotateClass}">
                 <img src="${escapeHtml(product.images[0])}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src='${PLACEHOLDER_IMAGE}'">
                 ${discount ? `<span class="badge">${escapeHtml(discount)}<small>¡Por tiempo limitado!</small></span>` : ''}
                 ${isSolidarityProduct(product) ? '<span class="solidarity-badge">Colección Solidaria</span>' : ''}
@@ -3280,12 +3359,14 @@
 
     function renderGallery(product, activeIndex) {
       const image = product.images[activeIndex] || product.images[0] || PLACEHOLDER_IMAGE;
+      const rotate = shouldRotatePhoto(product);
+      els.modalImage.closest('.gallery-main').classList.toggle('rotate-photo', rotate);
       els.modalImage.src = image;
       els.modalImage.alt = product.name;
       els.modalImage.onerror = () => { els.modalImage.src = PLACEHOLDER_IMAGE; };
 
       els.modalThumbs.innerHTML = product.images.map((url, index) => `
-        <button class="thumb ${index === activeIndex ? 'is-active' : ''}" type="button" data-image-index="${index}" aria-label="Ver foto ${index + 1}">
+        <button class="thumb ${index === activeIndex ? 'is-active' : ''}${rotate ? ' rotate-photo' : ''}" type="button" data-image-index="${index}" aria-label="Ver foto ${index + 1}">
           <img src="${escapeHtml(url)}" alt="" onerror="this.src='${PLACEHOLDER_IMAGE}'">
         </button>
       `).join('');
@@ -3603,25 +3684,27 @@
       }
     }
 
-    let searchLoaderTimer = null;
+    async function runSearch() {
+      state.category = { family: '', subfamily: '', design: '' };
+      setSolidarityMode(false);
+      if (els.family) els.family.value = '';
+      if (els.subfamily) els.subfamily.value = '';
+      if (els.design) els.design.value = '';
+      if (els.city) els.city.value = '';
+      await showPageLoader();
+      applyFilters();
+    }
 
-    [els.search, els.family, els.subfamily, els.design, els.city].forEach((control) => {
+    [els.family, els.subfamily, els.design, els.city].forEach((control) => {
       control.addEventListener('input', () => {
-        window.clearTimeout(searchLoaderTimer);
-        if (control === els.search && els.search.value.trim()) {
-          state.category = { family: '', subfamily: '', design: '' };
-          setSolidarityMode(false);
-          if (els.family) els.family.value = '';
-          if (els.subfamily) els.subfamily.value = '';
-          if (els.design) els.design.value = '';
-          if (els.city) els.city.value = '';
-        }
         if (control === els.family || control === els.subfamily) refreshFilters();
-        searchLoaderTimer = window.setTimeout(async () => {
-          await showPageLoader();
-          applyFilters();
-        }, control === els.search ? 260 : 0);
+        applyFilters();
       });
+    });
+
+    els.siteSearch.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await runSearch();
     });
 
     function closeMobileNav() {
