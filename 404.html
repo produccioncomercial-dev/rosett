@@ -11,6 +11,13 @@
       document.write('<base href="' + base + '">');
     })();
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-922D1T39WZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-922D1T39WZ');
+  </script>
   <link rel="icon" type="image/png" href="faviconrosett.png">
   <link rel="apple-touch-icon" href="faviconrosett.png">
   <meta name="description" content="Catálogo moderno de joyería de plata Rossett con compra por WhatsApp.">
@@ -3351,6 +3358,8 @@
       const message = encodeURIComponent(`Hola, quiero comprar la joya "${product.name}" con SKU ${product.sku}. ¿Sigue disponible?\n\nLink del producto: ${productLink}`);
       els.modalWhatsapp.href = `https://wa.me/51${phone}?text=${message}`;
       els.modalWhatsapp.dataset.solidarity = solidarityProduct ? 'true' : '';
+      els.modalWhatsapp.dataset.sku = product.sku;
+      els.modalWhatsapp.dataset.productName = product.name;
 
       document.querySelector('.modal-card').classList.toggle('is-solidarity', solidarityProduct);
       els.modal.classList.add('is-open');
@@ -3818,6 +3827,17 @@
     els.closeModal.addEventListener('click', closeProduct);
     els.modalCloseBottom.addEventListener('click', closeProduct);
     els.modalWhatsapp.addEventListener('click', (event) => {
+      if (typeof gtag === 'function' && state.activeProduct) {
+        gtag('event', 'whatsapp_click', {
+          event_category: 'Producto',
+          event_label: state.activeProduct.sku,
+          product_sku: state.activeProduct.sku,
+          product_name: state.activeProduct.name,
+          product_family: state.activeProduct.family || '',
+          product_city: state.activeProduct.city || '',
+          solidarity_collection: isSolidarityProduct(state.activeProduct)
+        });
+      }
       if (els.modalWhatsapp.dataset.solidarity !== 'true') return;
       event.preventDefault();
       const target = els.modalWhatsapp.href;
