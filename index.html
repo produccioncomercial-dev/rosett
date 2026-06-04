@@ -2236,32 +2236,105 @@
 
     footer {
       border-top: 1px solid var(--silver-2);
-      background: var(--navy);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.04), transparent 34%),
+        var(--navy);
       color: #dce3ee;
-      padding: 28px 0;
+      padding: 34px 0;
     }
 
     .footer-inner {
       width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1.1fr repeat(2, minmax(180px, .7fr));
-      gap: 16px;
+      grid-template-columns: minmax(220px, 1.2fr) minmax(220px, .9fr) minmax(220px, .9fr);
+      gap: 22px;
       align-items: start;
+    }
+
+    .footer-group {
+      display: grid;
+      gap: 12px;
+    }
+
+    .footer-heading {
+      margin: 0;
+      color: white;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
 
     .footer-item {
       display: grid;
-      gap: 4px;
+      gap: 3px;
       color: #eef3fb;
+      animation: footerSoftIn .45s ease both;
     }
 
     .footer-item span {
       color: #bfc9d8;
       font-size: .84rem;
-      font-weight: 800;
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: .06em;
+      letter-spacing: .05em;
+    }
+
+    .footer-item strong {
+      color: #f7fbff;
+      font-size: .95rem;
+      font-weight: 300;
+      line-height: 1.45;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 9px;
+    }
+
+    .footer-link {
+      width: fit-content;
+      color: #dce6f4;
+      text-decoration: none;
+      font-size: .94rem;
+      font-weight: 300;
+      line-height: 1.35;
+      position: relative;
+      transition: color .2s ease, transform .2s ease;
+    }
+
+    .footer-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -3px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--silver), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .24s ease;
+    }
+
+    .footer-link:hover {
+      color: white;
+      transform: translateX(3px);
+    }
+
+    .footer-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    @keyframes footerSoftIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 1240px) {
@@ -3023,21 +3096,38 @@
 
   <footer>
     <div class="footer-inner">
-      <div class="footer-item">
-        <span>Razón Social</span>
-        <strong>INVERSIONES EL TESORO S.A.C</strong>
+      <div class="footer-group">
+        <h2 class="footer-heading">Empresa</h2>
+        <div class="footer-item">
+          <span>Razón Social</span>
+          <strong>INVERSIONES EL TESORO S.A.C.</strong>
+        </div>
+        <div class="footer-item">
+          <span>R.U.C.</span>
+          <strong>20603568223</strong>
+        </div>
+        <div class="footer-item">
+          <span>Dirección fiscal</span>
+          <strong>AV. GENERAL ALVAREZ DE ARENALES NRO. 1982 - LINCE - LIMA - LIMA</strong>
+        </div>
       </div>
-      <div class="footer-item">
-        <span>R.U.C.</span>
-        <strong>20603568223</strong>
+      <div class="footer-group">
+        <h2 class="footer-heading">Atención</h2>
+        <div class="footer-item">
+          <span>Email</span>
+          <strong>info@inticash.com.pe</strong>
+        </div>
+        <div class="footer-item">
+          <span>Métodos de pago aceptados</span>
+          <strong>Visa, Mastercard, American Express</strong>
+        </div>
       </div>
-      <div class="footer-item">
-        <span>Email de atención cliente</span>
-        <strong>info@inticash.com.pe</strong>
-      </div>
-      <div class="footer-item">
-        <span>Métodos de pago aceptados</span>
-        <strong>Visa, Mastercard, American Express</strong>
+      <div class="footer-group">
+        <h2 class="footer-heading">Información legal</h2>
+        <nav class="footer-links" aria-label="Enlaces legales">
+          <a class="footer-link" href="terminos-condiciones.html">Términos y Condiciones Generales</a>
+          <a class="footer-link" href="politica-privacidad.html">Política de privacidad y uso de datos personales</a>
+        </nav>
       </div>
     </div>
   </footer>
