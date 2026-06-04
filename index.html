@@ -70,6 +70,10 @@
       overflow: hidden;
     }
 
+    body.promo-popup-open {
+      overflow: hidden;
+    }
+
     img {
       max-width: 100%;
       display: block;
@@ -1704,6 +1708,117 @@
       display: block;
     }
 
+    .promo-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(7, 27, 58, .68);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s ease, visibility .28s ease;
+    }
+
+    .promo-popup.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .promo-popup-card {
+      position: relative;
+      width: min(860px, 92vw);
+      transform: translateY(18px) scale(.96);
+      opacity: 0;
+      transition: transform .34s cubic-bezier(.22, .78, .21, 1), opacity .28s ease;
+    }
+
+    .promo-popup.is-open .promo-popup-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .promo-popup-media {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      background: var(--navy);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .34);
+    }
+
+    .promo-popup-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .promo-popup-close {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      z-index: 3;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: white;
+      color: var(--navy);
+      cursor: pointer;
+      font-size: 1.65rem;
+      line-height: 1;
+      box-shadow: 0 12px 30px rgba(7, 27, 58, .24);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .promo-popup-close:hover {
+      transform: scale(1.06) rotate(4deg);
+      box-shadow: 0 16px 34px rgba(7, 27, 58, .3);
+    }
+
+    .promo-popup-button {
+      position: absolute;
+      left: 11%;
+      bottom: 31%;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 210px;
+      min-height: 54px;
+      padding: 0 24px;
+      border: 1.5px solid rgba(255, 255, 255, .9);
+      border-radius: 999px;
+      background: rgba(7, 27, 58, .15);
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 750;
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .14);
+      transition: transform .22s ease, background .22s ease;
+    }
+
+    .promo-popup-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.28) 45%, transparent 62%);
+      transform: translateX(-120%);
+      animation: promoButtonShine 2.8s ease-in-out infinite;
+    }
+
+    .promo-popup-button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    @keyframes promoButtonShine {
+      0%, 45% { transform: translateX(-120%); }
+      78%, 100% { transform: translateX(120%); }
+    }
+
     .loader-icons .sky-icon {
       opacity: 0;
       animation-duration: var(--d, 4.2s);
@@ -2424,6 +2539,31 @@
         text-shadow: 0 2px 12px rgba(0, 0, 0, .72);
       }
 
+      .promo-popup {
+        padding: 18px;
+      }
+
+      .promo-popup-card {
+        width: min(94vw, 520px);
+      }
+
+      .promo-popup-close {
+        top: -12px;
+        right: -8px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.4rem;
+      }
+
+      .promo-popup-button {
+        left: 8%;
+        bottom: 31%;
+        min-width: 142px;
+        min-height: 38px;
+        padding: 0 14px;
+        font-size: .72rem;
+      }
+
       .hero-inner {
         padding: 38px 0 24px;
       }
@@ -2682,6 +2822,15 @@
       <span>Tu compra ayuda a transformar una historia.</span>
     </div>
   </div>
+  <section class="promo-popup" id="promoPopup" aria-hidden="true" aria-label="Oferta especial 20% de descuento">
+    <div class="promo-popup-card" role="dialog" aria-modal="true" aria-label="Oferta especial">
+      <button class="promo-popup-close" id="promoPopupClose" type="button" aria-label="Cerrar promoción">×</button>
+      <div class="promo-popup-media">
+        <img src="popup.webp" alt="Oferta especial 20% off en joyas de plata seleccionadas">
+        <a class="promo-popup-button" id="promoPopupButton" href="/ofertas-20">Ver joyas</a>
+      </div>
+    </div>
+  </section>
   <div class="ecogold-ticker" aria-label="Programa Puntos EcoGold">
     <div class="ecogold-ticker-track">
       <span>Obtén puntos EcoGold al adquirir nuestras joyas de plata y canjealos por dinero y fantásticos premios</span>
@@ -2898,6 +3047,7 @@
     const PRODUCTS_PER_PAGE = 30;
     const SOLIDARITY_ROUTE = 'coleccion-solidaria';
     const STORES_ROUTE = 'tiendas';
+    const PROMO_20_ROUTE = 'ofertas-20';
     const PACKAGING_IMAGE = 'bolsarosett.webp';
     const ROTATED_PHOTO_SKUS = new Set([
       '2N2052102.10',
@@ -2938,6 +3088,7 @@
       page: 1,
       category: { family: '', subfamily: '', design: '' },
       solidarity: false,
+      promo20: false,
       bannerIndex: 0,
       bannerTimer: null,
       returnUrl: '',
@@ -2993,6 +3144,9 @@
       modalLocation: $('#modalLocation'),
       modalWhatsapp: $('#modalWhatsapp'),
       thanksOverlay: $('#thanksOverlay'),
+      promoPopup: $('#promoPopup'),
+      promoPopupClose: $('#promoPopupClose'),
+      promoPopupButton: $('#promoPopupButton'),
       pageLoader: $('#pageLoader'),
       loaderText: $('#loaderText')
     };
@@ -3140,12 +3294,18 @@
       return page <= 1 ? `${base}${SOLIDARITY_ROUTE}` : `${base}${SOLIDARITY_ROUTE}/${page}`;
     }
 
+    function promo20Url(page = 1) {
+      const base = appBasePath();
+      return page <= 1 ? `${base}${PROMO_20_ROUTE}` : `${base}${PROMO_20_ROUTE}/${page}`;
+    }
+
     function storesUrl(city = '') {
       const base = appBasePath();
       return city && city !== 'Todas' ? `${base}${STORES_ROUTE}/${encodeURIComponent(city)}` : `${base}${STORES_ROUTE}`;
     }
 
     function listingUrl(page = state.page) {
+      if (state.promo20) return promo20Url(page);
       if (state.solidarity) return solidarityUrl(page);
       const query = els.search.value.trim();
       if (query) return searchUrl(query, page);
@@ -3189,6 +3349,29 @@
           resolve();
         }, duration);
       });
+    }
+
+    function openPromoPopup() {
+      if (!els.promoPopup || state.activeProduct) return;
+      els.promoPopup.classList.add('is-open');
+      els.promoPopup.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('promo-popup-open');
+    }
+
+    function closePromoPopup(savePreference = true) {
+      if (!els.promoPopup) return;
+      els.promoPopup.classList.remove('is-open');
+      els.promoPopup.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('promo-popup-open');
+      if (savePreference) sessionStorage.setItem('rosettPromo20Closed', '1');
+    }
+
+    function schedulePromoPopup() {
+      if (sessionStorage.getItem('rosettPromo20Closed') === '1') return;
+      if (currentRoute()) return;
+      window.setTimeout(() => {
+        if (!state.activeProduct) openPromoPopup();
+      }, 950);
     }
 
     function setBanner(index) {
@@ -3414,6 +3597,7 @@
         const searchable = normalizeText(`${product.name} ${product.sku} ${product.family} ${product.subfamily} ${product.design} ${product.city}`);
         return (!query || searchable.includes(query))
           && (!state.solidarity || isSolidarityProduct(product))
+          && (!state.promo20 || discountPercent(product) === 20)
           && (!family || product.family === family)
           && (!subfamily || product.subfamily === subfamily)
           && (!design || product.design === design);
@@ -3425,6 +3609,7 @@
       if (updateUrl && !state.activeProduct) {
         setHeroVisible(!els.search.value.trim() && !family && !subfamily && !design);
         if (state.solidarity) setHeroVisible(false);
+        if (state.promo20) setHeroVisible(false);
         window.history.replaceState({}, '', listingUrl(1));
       }
     }
@@ -3437,7 +3622,9 @@
       const start = (state.page - 1) * PRODUCTS_PER_PAGE;
       const pageProducts = state.filtered.slice(start, start + PRODUCTS_PER_PAGE);
       const activeTitle = [state.category.family, state.category.subfamily, state.category.design].filter(Boolean).join(' / ');
-      document.querySelector('#catalogTitle').textContent = state.solidarity
+      document.querySelector('#catalogTitle').textContent = state.promo20
+        ? 'Joyas con 20% OFF'
+        : state.solidarity
         ? 'Colección solidaria Lupines'
         : els.search.value.trim()
         ? `Resultados para "${els.search.value.trim()}"`
@@ -3535,6 +3722,7 @@
 
     function showStores(city = 'Todas', updateUrl = false) {
       setSolidarityMode(false);
+      setPromo20Mode(false);
       state.category = { family: '', subfamily: '', design: '' };
       state.page = 1;
       els.search.value = '';
@@ -3561,11 +3749,15 @@
     }
 
     function discountLabel(product) {
+      const discount = discountPercent(product);
+      return discount > 0 ? `${discount}% OFF` : '';
+    }
+
+    function discountPercent(product) {
       const regular = parsePrice(product.regularPrice);
       const sale = parsePrice(product.salePrice);
-      if (!regular || !sale || sale >= regular) return '';
-      const discount = Math.round(((regular - sale) / regular) * 100);
-      return discount > 0 ? `${discount}% OFF` : '';
+      if (!regular || !sale || sale >= regular) return 0;
+      return Math.round(((regular - sale) / regular) * 100);
     }
 
     function finalPrice(product) {
@@ -3697,9 +3889,14 @@
       document.body.classList.toggle('solidarity-mode', active);
     }
 
+    function setPromo20Mode(active) {
+      state.promo20 = active;
+    }
+
     function resetAllFilters() {
       state.category = { family: '', subfamily: '', design: '' };
       setSolidarityMode(false);
+      setPromo20Mode(false);
       state.page = 1;
       state.sort = 'recommended';
       els.search.value = '';
@@ -3738,6 +3935,7 @@
     function setCategory(category, updateUrl = true) {
       state.category = category || { family: '', subfamily: '', design: '' };
       setSolidarityMode(false);
+      setPromo20Mode(false);
       state.page = 1;
       els.search.value = '';
       showCatalog();
@@ -3751,6 +3949,7 @@
 
     function setSolidarityCollection(updateUrl = true, page = 1) {
       state.category = { family: '', subfamily: '', design: '' };
+      setPromo20Mode(false);
       setSolidarityMode(true);
       state.page = page;
       els.search.value = '';
@@ -3764,6 +3963,24 @@
       state.page = page;
       renderProducts();
       if (updateUrl) window.history.pushState({}, '', solidarityUrl(page));
+    }
+
+    function setPromo20Collection(updateUrl = true, page = 1) {
+      state.category = { family: '', subfamily: '', design: '' };
+      setSolidarityMode(false);
+      setPromo20Mode(true);
+      state.page = page;
+      els.search.value = '';
+      if (els.family) els.family.value = '';
+      if (els.subfamily) els.subfamily.value = '';
+      if (els.design) els.design.value = '';
+      if (els.city) els.city.value = '';
+      showCatalog();
+      setHeroVisible(false);
+      applyFilters(false);
+      state.page = page;
+      renderProducts();
+      if (updateUrl) window.history.pushState({}, '', promo20Url(page));
     }
 
     function searchFromRoute(route) {
@@ -3792,6 +4009,7 @@
       if (searchRoute) {
         state.category = { family: '', subfamily: '', design: '' };
         setSolidarityMode(false);
+        setPromo20Mode(false);
         state.page = searchRoute.page;
         els.search.value = searchRoute.query;
         if (els.family) els.family.value = '';
@@ -3821,10 +4039,17 @@
         return;
       }
 
+      if (normalizeText(routeParts[0]) === PROMO_20_ROUTE) {
+        const page = Number(routeParts[1] || 1);
+        setPromo20Collection(false, Number.isInteger(page) && page > 0 ? page : 1);
+        return;
+      }
+
       if (Number.isInteger(maybePage) && maybePage > 0) {
         state.page = maybePage;
         state.category = { family: '', subfamily: '', design: '' };
         setSolidarityMode(false);
+        setPromo20Mode(false);
         els.search.value = '';
         showCatalog();
         setHeroVisible(false);
@@ -3952,6 +4177,7 @@
       renderCategoryMenus();
       applyFilters(false);
       renderRoute();
+      schedulePromoPopup();
     }
 
     async function init() {
@@ -3969,6 +4195,7 @@
     async function runSearch() {
       state.category = { family: '', subfamily: '', design: '' };
       setSolidarityMode(false);
+      setPromo20Mode(false);
       if (els.family) els.family.value = '';
       if (els.subfamily) els.subfamily.value = '';
       if (els.design) els.design.value = '';
@@ -4044,6 +4271,19 @@
       closeMobileNav();
       window.history.pushState({}, '', pageUrl(1));
       renderRoute();
+    });
+
+    els.promoPopupClose.addEventListener('click', () => closePromoPopup(true));
+
+    els.promoPopup.addEventListener('click', (event) => {
+      if (event.target === els.promoPopup) closePromoPopup(true);
+    });
+
+    els.promoPopupButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      closePromoPopup(true);
+      await showPageLoader();
+      setPromo20Collection(true, 1);
     });
 
     els.mobileNavToggle.addEventListener('click', () => {
@@ -4138,6 +4378,10 @@
       if (event.target === els.modal) closeProduct();
     });
     document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && els.promoPopup.classList.contains('is-open')) {
+        closePromoPopup(true);
+        return;
+      }
       if (event.key === 'Escape' && state.activeProduct) closeProduct();
     });
 
